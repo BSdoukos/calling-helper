@@ -13,12 +13,9 @@ footer {
     resize: none;
     height: 125px;
 }
-.form-control.is-valid, .was-validated .form-control:valid, .form-control.is-valid:focus, .was-validated .form-control:valid:focus {
-    border-color: #ced4da;
-    box-shadow: none;
-    background-image: none;
+.hidden {
+    display: none;
 }
-
 .phone-table {
     margin-bottom: 0;
 }
