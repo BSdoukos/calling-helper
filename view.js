@@ -20,6 +20,20 @@ class PhoneListView {
                 }
                 break;
 
+            case 'listSelection':
+                const checkedBoxes = $('.list-selection-checkbox').get().filter((checkbox) => checkbox.checked);
+                if (checkedBoxes.length) {
+                    $('#deleteListBtn').attr('disabled', false);
+                    if (checkedBoxes.length < 2) {
+                        $('#openListBtn').attr('disabled', false);
+                    } else {
+                        $('#openListBtn').attr('disabled', true);
+                    }
+                } else {
+                    $('.list-managing-btn').attr('disabled', true)
+                }
+                break;
+            
             default:
                 break;
         }
@@ -31,7 +45,7 @@ class PhoneListView {
                 <table class="table phone-table border" data-index="${dataIndex}">
                     <thead>
                         <tr>
-                            <td class="title-cell" colspan="2">${name}</td>
+                            <td id="titleCell" colspan="2">${name}</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +66,11 @@ class PhoneListView {
         tableBody.parents('#listContainer').css('max-height', '287.5px').css('overflow', 'auto');
         tableBody.find('.no-numbers-cell').remove();
         if (!$('#addNumbersBtn').get().length) {
-            tableBody.parents('#listContainer').after('<button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addNumbersModal" id="addNumbersBtn">Adicionar números</button>');
+            tableBody.parents('#listContainer').after(`
+                <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addNumbersModal" id="addNumbersBtn">Adicionar números</button>
+                <br>
+                <button class="btn btn-link mt-2" data-bs-toggle="modal" data-bs-target="#listsManagingModal" id="manageListsBtn">Gerenciar listas</button>
+            `);
         }
     }
 
@@ -69,5 +87,32 @@ class PhoneListView {
         $('#workContainer').removeClass('hidden');
         $('#currentNumber').text($('.phone-table tr.current .number-cell').text());
         $('#callBtn').attr('href', `tel:55${$('.phone-table tr.current .number-cell').text().replace(/[\(\)\s\-]/g, '')}`);
+    }
+
+    displayNewNumberStatus(status) {
+        $(`.phone-table .number-cell:contains("${$('#currentNumber').text()}") + .status-cell`).text(status);
+    }
+
+    changeCurrentItem() {
+        const currentItem = $('.phone-table tr.current');
+        currentItem.removeClass('current bg-primary text-light');
+
+        if (currentItem.next('tr').length) {
+            currentItem.next('tr').addClass('current bg-primary text-light');
+        } else {
+            $('.phone-table tr:nth-of-type(2)').addClass('current bg-primary text-light');
+        }
+    }
+
+    displayListCard(listName, listNumberQuantity, listCompletionPercentage) {
+        $('#phoneListsDisplay').append(`
+            <li class="list-group-item d-flex justify-content-between center">
+                <div>
+                <div class="fw-bold">${listName}</div>
+                <p class="mb-0">${listNumberQuantity} números, ${listCompletionPercentage}% completa</p>
+                </div>
+                <input type="checkbox" class="list-selection-checkbox">
+            </li>
+        `);
     }
 }

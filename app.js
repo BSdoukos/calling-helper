@@ -20,3 +20,7 @@ $('#submitNumberBtn').on('click', function(e) {
     app.fillPhoneList();
     $('#addNumbersModal').modal('hide');
 });
+
+$('.status-btn').on('click', function() {
+    app.changeNumberStatus(this);
+});

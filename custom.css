@@ -9,10 +9,6 @@ footer {
     height: 72px;
     background-color: #f8f9fa;
 }
-#listDescription {
-    resize: none;
-    height: 125px;
-}
 .hidden {
     display: none;
 }
@@ -22,7 +18,7 @@ footer {
 .phone-table thead td {
     border-color: #dee2e6 !important;
 }
-.phone-table thead .title-cell {
+.phone-table thead #titleCell {
     background-color: #ECECEC;
 }
 .phone-table tbody td {
