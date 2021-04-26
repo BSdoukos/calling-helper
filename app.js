@@ -9,7 +9,7 @@ $('#phoneNumber, #phoneNumberSequence').on('input', function() {
     app.view.validateInput('phoneNumbers');
 });
 
-$('#submitListBtn').on('click', (e) => {
+$('#submitListBtn').on('click', function(e) {
     e.preventDefault();
     app.createPhoneList();
     $('#newListModal').modal('hide');
@@ -23,4 +23,12 @@ $('#submitNumberBtn').on('click', function(e) {
 
 $('.status-btn').on('click', function() {
     app.changeNumberStatus(this);
+});
+
+$('#openListBtn').on('click', function() {
+    app.openList($('#phoneListsDisplay .list-selection-checkbox:checked').siblings('.list-info').find('.list-title').text());
+});
+
+$('#deleteListBtn').on('click', function() {
+    app.removeLists();
 });

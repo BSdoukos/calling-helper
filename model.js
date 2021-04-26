@@ -6,15 +6,18 @@ class PhoneListModel {
         if (!localStorage.getItem('phoneLists')) localStorage.setItem('phoneLists', JSON.stringify([]));
 
         let phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
-        phoneLists = phoneLists.filter((list) => list.name !== $('#titleCell').text());
+        phoneLists = phoneLists.filter((list) => list && list.name !== $('#titleCell').text());
 
         const listNumbers = [];
         if ($('.phone-table .number-cell').get().length) {
             Array.from($('.phone-table .number-cell')).forEach((cell) => listNumbers.push({number: $(cell).text(), status: $(cell).next('.status-cell').text()}));
         }
+
+        const isCompleted = listNumbers.every((number) => number.status !== '-');
+
         const currentNumber = $('.phone-table tr.current .number-cell').text();
 
-        const listIndex = phoneLists.push({name: $('#titleCell').text(), numbers: listNumbers, currentNumber}) - 1;
+        const listIndex = phoneLists.push({name: $('#titleCell').text(), numbers: listNumbers, isCompleted, currentNumber}) - 1;
 
         localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
         localStorage.setItem('activeList', JSON.stringify(listIndex));
@@ -45,10 +48,32 @@ class PhoneListModel {
 
     getUserData() {
         if (localStorage.getItem('phoneLists')) {         
+
             const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
             const activeList = phoneLists[JSON.parse(localStorage.getItem('activeList'))];
 
             return {phoneLists, activeList};
         }
+    }
+
+    deleteList(listName) {
+        const userData = this.getUserData();
+
+        let activeList;
+        userData.phoneLists.forEach((list) => {
+            if (list.name === listName) {
+                if (list === userData.activeList) {
+                    activeList = 0;
+                }
+            }
+        });
+        
+        userData.phoneLists = userData.phoneLists.filter((list) => list.name !== listName);
+        
+        activeList = activeList === undefined ?  userData.phoneLists.indexOf(userData.activeList) : activeList;
+        activeList = userData.phoneLists.length ? activeList : 'deleted';
+
+        localStorage.setItem('phoneLists', JSON.stringify(userData.phoneLists));
+        localStorage.setItem('activeList', JSON.stringify(activeList));
     }
 }
