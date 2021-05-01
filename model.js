@@ -76,4 +76,16 @@ class PhoneListModel {
         localStorage.setItem('phoneLists', JSON.stringify(userData.phoneLists));
         localStorage.setItem('activeList', JSON.stringify(activeList));
     }
+
+    createContact() {
+        const contact = new Contact($('#contactName').val(), $('#currentNumber').text(), [
+            {
+                topic: $('#firstTalkTopic').val(),
+                text: $('#firstTalkText').val()
+            }
+        ]);       
+        contact.save();
+
+        return contact;
+    }
 }

@@ -26,6 +26,8 @@ class PhoneListController {
     displayUserData() {
         if (JSON.parse(localStorage.getItem('activeList')) === 'deleted') {
             this.view.clear();
+            localStorage.removeItem('phoneLists');
+            localStorage.removeItem('activeList');
             return;
         }
 
@@ -34,7 +36,15 @@ class PhoneListController {
             this.view.displayPhoneList(userData.activeList.name, JSON.parse(localStorage.getItem('userData.activeList')));
             if (userData.activeList.numbers.length) {
                 this.view.adaptPhoneList();
-                userData.activeList.numbers.forEach((number) => this.view.appendNumber(number.number, number.status, false));
+
+                userData.activeList.numbers.forEach((number) => {
+                    if (['Inexistente', 'Cx. postal', '-'].some((status) => status === number.status)) {
+                        this.view.appendNumber(number.number, number.status, false);
+                    } else {
+                        this.view.appendNumber(number.number, `<a class="link-primary">${number.status}</a>`, false);
+                    }
+                });
+
                 $(`.phone-table .number-cell:contains("${userData.activeList.currentNumber}")`).parent().addClass('current bg-primary text-light');
                 app.view.updateWorkContainer();
                 this.displayLists();
@@ -89,5 +99,13 @@ class PhoneListController {
     removeLists() {
         $('.list-selection-checkbox:checked').get().forEach((checkbox) => this.model.deleteList($(checkbox).siblings('.list-info').find('.list-title').text()));
         this.displayUserData();
+    }
+
+    registerContact() {
+        this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`);
+        this.view.changeCurrentItem();
+        this.model.registerPhoneList();
+        this.view.updateWorkContainer();
+        this.displayLists();
     }
 }

@@ -2,13 +2,15 @@ class PhoneListView {
     constructor() {
     }
 
-    validateInput(type) {
+    validateInput(type, formSelector) {
         switch (type) {
-            case 'listName':
-                if ($('#listName').val() !== '') {
-                    $('#submitListBtn').attr('disabled', false)
+            case 'simple':
+                const requiredInputs = $(formSelector).find('input').get().filter((input) => input.hasAttribute('required'));
+
+                if (requiredInputs.every((input) => input.value !== '')) {
+                    $(formSelector).find('[type="submit"]').attr('disabled', false)
                 } else {
-                    $('#submitListBtn').attr('disabled', true)
+                    $(formSelector).find('[type="submit"]').attr('disabled', true)
                 }
                 break;
             
@@ -99,7 +101,7 @@ class PhoneListView {
     }
 
     displayNewNumberStatus(status) {
-        $(`.phone-table .number-cell:contains("${$('#currentNumber').text()}") + .status-cell`).text(status);
+        $(`.phone-table .number-cell:contains("${$('#currentNumber').text()}") + .status-cell`).html(status);
 
         if ($('.phone-table .status-cell').get().every((cell) => $(cell).text() !== '-')) {
             $('#addNumbersBtn').attr('disabled', true);
@@ -139,6 +141,5 @@ class PhoneListView {
         $('#listContainer').removeAttr('style');
         $('#workContainer').addClass('hidden');
         $('#noListsInfo').removeClass('hidden');
-        localStorage.clear();
     }
 }

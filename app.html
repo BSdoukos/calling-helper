@@ -44,8 +44,8 @@
             <button class="btn btn-secondary mb-2 mx-1 status-btn">Cx. postal</button>
             <a class="btn btn-primary d-md-none mb-2 mx-1" id="callBtn" href="tel:5541988881129">Ligar</a>
             <button class="btn btn-secondary mb-2 mx-1 status-btn">Inexistente</button>
-            <button class="btn btn-success mb-2 mx-1">Sucesso</button>
-            <button class="btn btn-secondary mb-2 mx-1">Outro</button>
+            <button class="btn btn-success mb-2 mx-1" data-bs-toggle="modal" data-bs-target="#contactCreationModal">Sucesso</button>
+            <button class="btn btn-secondary mb-2 mx-1" data-bs-toggle="modal" data-bs-target="#otherStatusesModal">Outro</button>
         </div>
           <div id="listContainer">
             <div id="noListsInfo">
@@ -116,7 +116,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title h5" id="listsManagingModaTitle">Gerenciar listas</h3>
+            <h3 class="modal-title h5" id="listsManagingModalTitle">Gerenciar listas</h3>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -131,11 +131,89 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-    <script src="model.js"></script>
-    <script src="view.js"></script>
-    <script src="controller.js"></script>
-    <script src="app.js"></script>
+    <div class="modal fade" id="contactCreationModal" tabindex="-1" aria-labelledby="contactCreationModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title h5" id="contactCreationModalTitle">Registrar contato</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form>
+                  <div class="mb-3">
+                    <label for="contactName" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="contactName" required>
+                  </div>
+                  <div class="mb-3">
+                    <input type="checkbox" class="me-1" id="unknownName">
+                    <label for="unknownName" class="form-label">Não sei o nome do contatado</label>
+                  </div>
+                  <div class="mb-3">
+                    <label for="firstTalkTopic" class="form-label">Tema da conversa</label>
+                    <input type="text" class="form-control" id="firstTalkTopic" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="firstTalkText" class="form-label">Texto lido</label>
+                    <input type="text" class="form-control" id="firstTalkText">
+                  </div>
+                  <div class="mb-3">
+                    <input type="checkbox" class="me-1" id="callAgain">
+                    <label for="callAgain" class="form-label">Ligar novamente</label>
+                  </div>
+                  <div class="mb-3">
+                    <label for="nextTalkTopic" class="form-label">Tema da próxima conversa</label>
+                    <input type="text" class="form-control next-talk-input" id="nextTalkTopic" aria-disabled="true" disabled>
+                  </div>
+                  <div class="mb-3">
+                    <label for="nextTalkDate" class="form-label">Data</label>
+                    <input type="date" class="form-control next-talk-input" id="nextTalkDate" aria-disabled="true" disabled>
+                  </div>
+                  <div class="mb-3">
+                    <label for="nextTalkTime" class="form-label">Horário</label>
+                    <input type="time" class="form-control next-talk-input" id="nextTalkTime" aria-disabled="true" disabled>
+                  </div>
+                  <div class="mb-3">
+                    <input type="checkbox" class="me-1 next-talk-input" id="rememberViaEmail" aria-disabled="true" disabled>
+                    <label for="rememberViaEmail" class="form-label">Lembre-me via e-mail</label>
+                  </div>
+                  <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary" id="submitContactBtn" data-bs-dismiss="modal" disabled>Registrar</button>
+                  </div>
+              </form>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="otherStatusesModal" tabindex="-1" aria-labelledby="otherStatusesModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title h5" id="otherStatusesModalTitle">Status do número</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <form>
+            <select name="otherstatuses" id="otherStatuses">
+              <option value="fail">A ligação falhou</option>
+              <option value="busy">Número ocupado</option>
+              <option value="outofservice">Celular desligado/fora de área</option>
+            </select>
+          </form>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary" id="submitStatusBtn" data-bs-dismiss="modal">Registrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+  <script src="objects.js"></script>
+  <script src="model.js"></script>
+  <script src="view.js"></script>
+  <script src="controller.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
