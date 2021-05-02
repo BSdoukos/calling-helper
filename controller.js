@@ -38,14 +38,14 @@ class PhoneListController {
                 this.view.adaptPhoneList();
 
                 userData.activeList.numbers.forEach((number) => {
-                    if (['Inexistente', 'Cx. postal', '-'].some((status) => status === number.status)) {
+                    if (['Inexistente', 'Cx. postal', 'Falha', 'Ocupado', 'Desligado/sem serviço', '-'].some((status) => status === number.status)) {
                         this.view.appendNumber(number.number, number.status, false);
                     } else {
                         this.view.appendNumber(number.number, `<a class="link-primary">${number.status}</a>`, false);
                     }
                 });
 
-                $(`.phone-table .number-cell:contains("${userData.activeList.currentNumber}")`).parent().addClass('current bg-primary text-light');
+                $(`.phone-table .number-cell:contains("${userData.activeList.currentNumber}")`).parent().addClass('current table-active');
                 app.view.updateWorkContainer();
                 this.displayLists();
 
@@ -80,8 +80,8 @@ class PhoneListController {
         this.displayLists();
     }
 
-    changeNumberStatus(statusButton) {
-        this.view.displayNewNumberStatus($(statusButton).text());
+    changeNumberStatus(status) {
+        this.view.displayNewNumberStatus(status);
         this.view.changeCurrentItem();
         this.model.registerPhoneList();
         this.view.updateWorkContainer();

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="custom.css">
     <title>App | Calling Helper</title>
 </head>
-<body class="d-flex flex-column">
+<body>
     <header class="border-bottom">
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
             <a class="navbar-brand ms-4" href="#">Bruno Sdoukos</a>
@@ -20,44 +20,62 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav text-center border-top w-100 mt-3 pt-2">
-                <li class="nav-item py-2">
+            <ul class="navbar-nav text-center border-top w-100 mt-3 pt-2 p-lg-0 m-lg-0 d-lg-flex justify-content-center">
+                <li class="nav-item py-2 mx-lg-4">
                 <a class="nav-link active" aria-current="page" href="#">Minhas listas</a>
                 </li>
-                <li class="nav-item py-2">
+                <li class="nav-item py-2 mx-lg-4">
                 <a class="nav-link" href="#">Contatos</a>
                 </li>
-                <li class="nav-item py-2">
+                <li class="nav-item py-2 mx-lg-4">
                 <a class="nav-link" href="#">Configurações</a>
                 </li>
-                <li class="nav-item py-2">
+                <li class="nav-item py-2 mx-lg-4">
                 <a class="nav-link">Ajuda</a>
                 </li>
             </ul>
             </div>
         </nav>
     </header>
-    <main class="text-center py-5 px-2">
-        <div class="container">
-          <div class="mb-5 hidden" id="workContainer">
+    <main class="text-center py-5 px-2 d-lg-flex align-items-center position-relative">
+      <div class="container">
+          <div class="mb-4 hidden mx-auto" id="workContainer">
             <h2 class="card-title h4 mb-4" id="currentNumber">(41) 98888-1129</h2>
-            <button class="btn btn-secondary mb-2 mx-1 status-btn">Cx. postal</button>
+            <!-- <button class="btn btn-secondary mb-2 mx-1 status-btn">Cx. postal</button>
             <a class="btn btn-primary d-md-none mb-2 mx-1" id="callBtn" href="tel:5541988881129">Ligar</a>
             <button class="btn btn-secondary mb-2 mx-1 status-btn">Inexistente</button>
             <button class="btn btn-success mb-2 mx-1" data-bs-toggle="modal" data-bs-target="#contactCreationModal">Sucesso</button>
-            <button class="btn btn-secondary mb-2 mx-1" data-bs-toggle="modal" data-bs-target="#otherStatusesModal">Outro</button>
-        </div>
-          <div id="listContainer">
-            <div id="noListsInfo">
-              <h2 class="card-title h4 mb-3">Nova lista</h2>
-              <p class="card-text mb-3">Você ainda não cadastrou nenhuma lista telefônica. Cadastre uma para começar.</p>
-              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListModal">Cadastrar</button>
+            <button class="btn btn-secondary mb-2 mx-1 status-btn d-none d-lg-inline">Ocupado</button>
+            <button class="btn btn-secondary mb-2 mx-1 status-btn d-none d-lg-inline">Falha</button>
+            <button class="btn btn-secondary mb-2 mx-1 d-lg-none" data-bs-toggle="modal" data-bs-target="#otherStatusesModal">Outro</button> -->
+            <div class="status-line d-flex justify-content-center">
+              <a class="btn btn-primary d-md-none mx-2 d-flex align-items-center" id="callBtn" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                </svg>
+              </a>
+              <select class="form-select" id="statusSelector" aria-label="Status selector">
+                <option value="Sucesso" selected>Sucesso</option>
+                <option value="Inexistente">Inexistente</option>
+                <option value="Cx. postal">Cx. postal</option>
+                <option value="Desligado/sem serviço">Desligado/sem serviço</option>
+                <option value="Falha">Falha</option>
+                <option value="Ocupado">Ocupado</option>
+              </select>
+              <button class="btn btn-primary ms-2" id="submitStatusBtn">Registrar</button>
             </div>
+        </div>
+        <div id="listContainer">
+          <div id="noListsInfo">
+            <h2 class="card-title h4 mb-3">Nova lista</h2>
+            <p class="card-text mb-3">Você ainda não cadastrou nenhuma lista telefônica. Cadastre uma para começar.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListModal">Cadastrar</button>
           </div>
         </div>
+      </div>
     </main>
     <footer class="position-fixed bottom-0 w-100 d-flex align-items-center justify-content-center border-top">
-        <button class="btn btn-primary">Iniciar cronômetro</button>
+      <button class="btn btn-primary" id="startTimingBtn">Iniciar cronômetro</button>
     </footer>   
 
     <div class="modal fade" id="newListModal" tabindex="-1" aria-labelledby="newListModalTitle" aria-hidden="true">
@@ -183,29 +201,6 @@
           </div>
         </div>
       </div>
-  </div>
-
-  <div class="modal fade" id="otherStatusesModal" tabindex="-1" aria-labelledby="otherStatusesModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title h5" id="otherStatusesModalTitle">Status do número</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <form>
-            <select name="otherstatuses" id="otherStatuses">
-              <option value="fail">A ligação falhou</option>
-              <option value="busy">Número ocupado</option>
-              <option value="outofservice">Celular desligado/fora de área</option>
-            </select>
-          </form>
-          <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary" id="submitStatusBtn" data-bs-dismiss="modal">Registrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

@@ -47,8 +47,8 @@ class PhoneListView {
             $('.phone-table, .list-related-btn').remove();
         }
         $('#listContainer').get(0).innerHTML += `
-            <div class="container">
-                <table class="table phone-table border"">
+            <div class="container p-lg-0">
+                <table class="table phone-table table-bordered">
                     <thead>
                         <tr>
                             <td id="titleCell" colspan="2">${name}</td>
@@ -73,9 +73,11 @@ class PhoneListView {
         tableBody.find('.no-numbers-cell').remove();
         if (!$('#addNumbersBtn').get().length) {
             tableBody.parents('#listContainer').after(`
-                <button class="btn btn-primary mt-3 list-related-btn" data-bs-toggle="modal" data-bs-target="#addNumbersModal" id="addNumbersBtn">Adicionar números</button>
-                <br>
-                <button class="btn btn-link mt-2 list-related-btn" data-bs-toggle="modal" data-bs-target="#listsManagingModal" id="manageListsBtn">Gerenciar listas</button>
+                <div class="mt-2 d-lg-flex justify-content-center align-items-center">
+                    <button class="btn btn-primary mt-3 mx-lg-2 list-related-btn" data-bs-toggle="modal" data-bs-target="#addNumbersModal" id="addNumbersBtn">Adicionar números</button>
+                    <br>
+                    <button class="btn text-primary mt-2 mx-lg-2 mt-lg-3 list-related-btn" data-bs-toggle="modal" data-bs-target="#listsManagingModal" id="manageListsBtn">Gerenciar listas</button>
+                </div>
             `);
         }
     }
@@ -84,13 +86,13 @@ class PhoneListView {
         const table = $('.phone-table tbody');
         const newRow = $(`
             <tr>
-                <td class="number-cell">${number}</td>
-                <td class="status-cell">${status}</td>
+                <td class="number-cell text-truncate">${number}</td>
+                <td class="status-cell text-truncate">${status}</td>
             </tr>
         `).appendTo(table);
 
         if (!table.find('tr.current').length && setCurrent) {
-            newRow.addClass('current bg-primary text-light');
+            newRow.addClass('current table-active');
         }
     }
 
@@ -110,12 +112,12 @@ class PhoneListView {
 
     changeCurrentItem() {
         const currentItem = $('.phone-table tr.current');
-        currentItem.removeClass('current bg-primary text-light');
+        currentItem.removeClass('current table-active');
 
         if (currentItem.next('tr').length) {
-            currentItem.next('tr').addClass('current bg-primary text-light');
+            currentItem.next('tr').addClass('current table-active');
         } else {
-            $('.phone-table tr:nth-of-type(2)').addClass('current bg-primary text-light');
+            $('.phone-table tr:nth-of-type(2)').addClass('current table-active');
         }
     }
 

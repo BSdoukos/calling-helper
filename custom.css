@@ -12,15 +12,37 @@ footer {
 .hidden {
     display: none;
 }
-.phone-table {
-    margin-bottom: 0;
+#workContainer {
+    max-width: 485px;
+}
+.status-line {
+    padding: 0 0.75rem;
+}
+.phone-table, #listContainer {
+    margin: auto auto 0;
+    max-width: 485px;
+    max-height: 47.35vh !important;
+    scrollbar-width: thin;
 }
 .phone-table thead td {
     border-color: #dee2e6 !important;
 }
 .phone-table thead #titleCell {
-    background-color: #ECECEC;
+    font-weight: bold;
 }
 .phone-table tbody td {
     width: 50%;
+}
+
+@media only screen and (min-width: 992px) {
+    .navbar-nav {
+        border-top: 0 !important;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60% !important;
+    }
+    .status-line {
+        padding: 0;
+    }
 }

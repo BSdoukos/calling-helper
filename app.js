@@ -21,8 +21,12 @@ $('#submitNumberBtn').on('click', function(e) {
     $('#addNumbersModal').modal('hide');
 });
 
-$('.status-btn').on('click', function() {
-    app.changeNumberStatus(this);
+$('#submitStatusBtn').on('click', function() {
+    if ($('#statusSelector').val() !== 'Sucesso') {
+        app.changeNumberStatus($('#statusSelector').val());
+    } else {
+        $('#contactCreationModal').modal('show');
+    }
 });
 
 $('#openListBtn').on('click', function() {
@@ -50,4 +54,27 @@ $('#callAgain').on('change', function() {
 $('#submitContactBtn').on('click', function(e) {
     e.preventDefault();
     app.registerContact();
+});
+
+$('#startTimingBtn').on('click', function() {
+    const timing = new Timing();
+    timing.start();
+
+    function updateCronometer() {
+        timing.update();
+
+        if (!$('#timingText').length) {
+            $(this).parent().append(`
+                <button class="btn text-secondary me-3">Pausar</button>
+                <p id="timingText" class="mb-0"></p>
+                <button class="btn text-danger ms-3">Parar</button>
+            `);
+        }
+
+        $('#timingText').text(timing.format());
+
+        $(this).css('display', 'none');  
+    }
+    updateCronometer.call(this);
+    setInterval(updateCronometer.bind(this), 1000)
 });
