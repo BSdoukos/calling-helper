@@ -22,8 +22,8 @@ $('#submitNumberBtn').on('click', function(e) {
 });
 
 $('#submitStatusBtn').on('click', function() {
-    if ($('#statusSelector').val() !== 'Sucesso') {
-        app.changeNumberStatus($('#statusSelector').val());
+    if ($('#statusSelector').val() !== 'Sucesso' && $('#statusSelector').val() !== '-') {
+        app.changeNumberStatus($('#statusSelector').val())
     } else {
         $('#contactCreationModal').modal('show');
     }
@@ -57,24 +57,109 @@ $('#submitContactBtn').on('click', function(e) {
 });
 
 $('#startTimingBtn').on('click', function() {
-    const timing = new Timing();
+    window.timing = new Timing();
     timing.start();
 
-    function updateCronometer() {
+    window.updateCronometer = function() {
         timing.update();
 
         if (!$('#timingText').length) {
             $(this).parent().append(`
-                <button class="btn text-secondary me-3">Pausar</button>
+                <button class="btn text-secondary me-3 cronometer-btns" id="toggleTimingBtn">Pausar</button>
                 <p id="timingText" class="mb-0"></p>
-                <button class="btn text-danger ms-3">Parar</button>
+                <button class="btn text-danger ms-3 cronometer-btns" id="stopTimingBtn" data-bs-toggle="modal" data-bs-target="#timeReportingModal">Parar</button>
             `);
         }
 
         $('#timingText').text(timing.format());
 
         $(this).css('display', 'none');  
-    }
-    updateCronometer.call(this);
-    setInterval(updateCronometer.bind(this), 1000)
+    }.bind(this);
+
+    updateCronometer();
+
+    $('#toggleTimingBtn').on('click', function() {
+        if (this.innerText === 'Pausar') {
+            timing.pause();
+            clearInterval(timingCounter);
+            this.innerText = 'Continuar';
+        } else {
+            timing.resume();
+            updateCronometer();
+            window.timingCounter = setInterval(updateCronometer, 1000);
+            this.innerText = 'Pausar';
+        }
+    });
+
+    $('#stopTimingBtn').on('click', function() {
+        clearInterval(timingCounter);
+        timing.update();
+        $('#workedTime').text(`${timing.time.hours} horas e ${timing.time.minutes} minutos`);
+        $('.cronometer-btns, #timingText').remove();
+        $('#startTimingBtn').css('display', 'initial');
+    });
+
+    window.timingCounter = setInterval(updateCronometer, 1000)
 });
+
+$('#reportTimeBtn').on('click', function() {
+    let report;
+    if (!localStorage.getItem('report')) {
+        report = new Report(true, 0, 0, 0, timing);
+    } else {
+        report = new Report(false, 0, 0, 0, timing);
+    }
+    
+    report.save();
+});
+
+$(document).on('click', '.number-row', function(e) {
+    const listData = new ListHandler();
+    const targetRow = $(e.target).parents('.number-row');
+
+    $('#numberInfoTel').text(targetRow.find('.number-cell').text());
+    $('#numberInfoStatus').text(targetRow.find('.status-cell').text());
+
+    const lastCall = listData.getPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text()).lastCall;
+    const lastCallInfo = lastCall || '-';
+
+    $('#numberInfoLastCall').text(lastCallInfo);
+
+    if (!window.DDDs) {
+        fetch('https://gist.githubusercontent.com/ThadeuLuz/797b60972f74f3080b32642eb36481a5/raw/50eff700db88f10f5d619b85f8684145b91e1888/dddsBrasileiros.json')
+        .then((response) => response.text())
+        .then((data) => {
+            window.DDDs = JSON.parse(data);
+            const UF = DDDs.estadoPorDdd[$('#numberInfoTel').text().substring(1, 3)] || 'Não identificada';
+            $('#numberInfoUF').text(UF);
+        });
+    } else {
+        const UF = DDDs.estadoPorDdd[$('#numberInfoTel').text().substring(1, 3)] || 'Não identificada';
+        $('#numberInfoUF').text(UF);
+    }
+});
+
+$('#editInfoBtn, #saveChangesBtn').on('click', function() {
+    if (this.innerText === 'Editar') {
+        this.innerText = 'Cancelar';
+    } else {
+        this.innerText ='Editar';
+    }
+    $('#saveChangesBtn, #statusInfoSelector, #numberInfoStatus').toggleClass('d-none');
+});
+
+
+$('#saveChangesBtn').on('click', function() {
+    const listsData = new ListHandler();
+    const newStatus = $('#statusInfoSelector').val();
+
+    if (newStatus === '-') {
+        listsData.editPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text(), 'lastCall', '-');
+    }
+
+    listsData.editPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text(), 'status', newStatus);
+
+    app.displayUserData();
+});
+
+$('#deleteNumberBtn').on('click', app.deleteNumber.bind(app));

@@ -6,11 +6,20 @@ class PhoneListModel {
         if (!localStorage.getItem('phoneLists')) localStorage.setItem('phoneLists', JSON.stringify([]));
 
         let phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+
+        const currentList = phoneLists.filter((list) => list && list.name === $('#titleCell').text());
+
+        let lastCalls 
+        if (currentList.length) {
+            lastCalls = currentList[0].numbers.map((number) => number.lastCall);
+        }
+
         phoneLists = phoneLists.filter((list) => list && list.name !== $('#titleCell').text());
+
 
         const listNumbers = [];
         if ($('.phone-table .number-cell').get().length) {
-            Array.from($('.phone-table .number-cell')).forEach((cell) => listNumbers.push({number: $(cell).text(), status: $(cell).next('.status-cell').text()}));
+            Array.from($('.phone-table .number-cell')).forEach((cell, i) => listNumbers.push({number: $(cell).text(), status: $(cell).next('.status-cell').text(), lastCall: lastCalls[i]}));
         }
 
         const isCompleted = listNumbers.every((number) => number.status !== '-');

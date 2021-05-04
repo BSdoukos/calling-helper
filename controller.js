@@ -50,7 +50,17 @@ class PhoneListController {
                 this.displayLists();
 
                 if (userData.activeList.isCompleted) {
-                    $('#addNumbersBtn').attr('disabled', true);
+                    const addNumbersBtn = $('#addNumbersBtn');
+
+                    addNumbersBtn.attr('disabled', true);
+                    addNumbersBtn.wrap(`
+                        <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="Não é possível adicionar números a listas que já estão completas. Crie uma nova lista para adicionar novos números."></span>
+                    `);
+                    // Bootstrap script for initializing popovers
+                        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+                        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                        return new bootstrap.Popover(popoverTriggerEl)
+                    })
                 }
             }
         }
@@ -80,10 +90,31 @@ class PhoneListController {
         this.displayLists();
     }
 
+    setNumberCallTime() {
+        const listData = new ListHandler();
+        const date = new Date();
+        const timeData = {
+            day: date.getDate(),
+            month: date.getMonth(),
+            year: date.getFullYear(),
+            hours: date.getHours(),
+            minutes: date.getMinutes()
+        };
+
+        for (const n in timeData) {
+            if (timeData[n] < 10) {
+                timeData[n] = '0' + timeData[n];
+            }
+        }
+
+        listData.editPhoneNumber($('#titleCell').text(), $('#currentNumber').text(), 'lastCall', `${timeData.day}/${timeData.month}/${timeData.year} ${timeData.hours}:${timeData.minutes}`);
+    }
+
     changeNumberStatus(status) {
         this.view.displayNewNumberStatus(status);
         this.view.changeCurrentItem();
         this.model.registerPhoneList();
+        this.setNumberCallTime();
         this.view.updateWorkContainer();
         this.displayLists();
     }
@@ -107,5 +138,18 @@ class PhoneListController {
         this.model.registerPhoneList();
         this.view.updateWorkContainer();
         this.displayLists();
+    }
+
+    deleteNumber() {
+        const listsData = new ListHandler();
+
+        if ($('#numberInfoTel').text() === $('#currentNumber').text()) {
+            this.view.changeCurrentItem();
+            listsData.editList($('#titleCell').text(), 'currentNumber', $('.phone-table tr.current .number-cell').text());
+        }
+
+        listsData.deletePhoneNumber($('#titleCell').text(), $('#numberInfoTel').text());
+
+        this.displayUserData();
     }
 }

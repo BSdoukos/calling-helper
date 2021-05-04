@@ -85,7 +85,7 @@ class PhoneListView {
     appendNumber(number, status, setCurrent = true) {
         const table = $('.phone-table tbody');
         const newRow = $(`
-            <tr>
+            <tr class="number-row" data-bs-toggle="modal" data-bs-target="#numberInfoModal">
                 <td class="number-cell text-truncate">${number}</td>
                 <td class="status-cell text-truncate">${status}</td>
             </tr>
@@ -94,6 +94,8 @@ class PhoneListView {
         if (!table.find('tr.current').length && setCurrent) {
             newRow.addClass('current table-active');
         }
+
+        table.parent('table').addClass('table-hover');
     }
 
     updateWorkContainer() {

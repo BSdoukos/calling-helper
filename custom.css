@@ -24,6 +24,9 @@ footer {
     max-height: 47.35vh !important;
     scrollbar-width: thin;
 }
+.phone-table .number-row {
+    cursor: pointer;
+}
 .phone-table thead td {
     border-color: #dee2e6 !important;
 }

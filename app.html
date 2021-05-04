@@ -41,20 +41,13 @@
       <div class="container">
           <div class="mb-4 hidden mx-auto" id="workContainer">
             <h2 class="card-title h4 mb-4" id="currentNumber">(41) 98888-1129</h2>
-            <!-- <button class="btn btn-secondary mb-2 mx-1 status-btn">Cx. postal</button>
-            <a class="btn btn-primary d-md-none mb-2 mx-1" id="callBtn" href="tel:5541988881129">Ligar</a>
-            <button class="btn btn-secondary mb-2 mx-1 status-btn">Inexistente</button>
-            <button class="btn btn-success mb-2 mx-1" data-bs-toggle="modal" data-bs-target="#contactCreationModal">Sucesso</button>
-            <button class="btn btn-secondary mb-2 mx-1 status-btn d-none d-lg-inline">Ocupado</button>
-            <button class="btn btn-secondary mb-2 mx-1 status-btn d-none d-lg-inline">Falha</button>
-            <button class="btn btn-secondary mb-2 mx-1 d-lg-none" data-bs-toggle="modal" data-bs-target="#otherStatusesModal">Outro</button> -->
             <div class="status-line d-flex justify-content-center">
               <a class="btn btn-primary d-md-none mx-2 d-flex align-items-center" id="callBtn" href="#">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
                 </svg>
               </a>
-              <select class="form-select" id="statusSelector" aria-label="Status selector">
+              <select class="form-select" id="statusSelector" aria-label="Seletor de status do número">
                 <option value="Sucesso" selected>Sucesso</option>
                 <option value="Inexistente">Inexistente</option>
                 <option value="Cx. postal">Cx. postal</option>
@@ -201,6 +194,61 @@
           </div>
         </div>
       </div>
+  </div>
+
+  <div class="modal fade" id="timeReportingModal" tabindex="-1" aria-labelledby="timeReportingModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title h5" id="timeReportingModalTitle">Salvar atividade</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Muito bem! Você trabalhou durante <b id="workedTime"></b>. Deseja acrescentar esses números ao seu relatório mensal?</p>
+          <div class="text-center">
+            <button class="btn btn-primary mx-1 mt-1" type="button" data-bs-dismiss="modal" aria-label="Sim" id="reportTimeBtn">Sim</button>
+            <button class="btn btn-primary mx-1 mt-1" type="button" data-bs-dismiss="modal" aria-label="Não">Não</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="numberInfoModal" tabindex="-1" aria-labelledby="numberInfoModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title h5" id="numberInfoModalTitle">Informações do número</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <em class="d-block mb-4" id="numberInfoTel"></em>
+
+          <h5 class="fs-6 fw-bold">Unidade federativa</h5>
+          <p id="numberInfoUF">Carregando...</p>
+
+          <h5 class="fs-6 fw-bold">Última ligação</h5>
+          <p id="numberInfoLastCall"></p>
+
+          <h5 class="fs-6 fw-bold">Status</h5>
+          <p id="numberInfoStatus"></p>
+          <select class="form-select mb-4 d-none" id="statusInfoSelector" aria-label="Seletor de status do número">
+            <option value="-">-</option>
+            <option value="Sucesso">Sucesso</option>
+            <option value="Inexistente">Inexistente</option>
+            <option value="Cx. postal">Cx. postal</option>
+            <option value="Desligado/sem serviço">Desligado/sem serviço</option>
+            <option value="Falha">Falha</option>
+            <option value="Ocupado">Ocupado</option>
+          </select>
+          <div class="text-center">
+            <button class="btn btn-primary mx-1 d-none" id="saveChangesBtn" data-bs-dismiss="modal">Salvar mudanças</button>
+            <button class="btn btn-primary mx-1" id="editInfoBtn">Editar</button>
+            <button class="btn btn-danger mx-1" id="deleteNumberBtn" data-bs-dismiss="modal">Excluir número</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

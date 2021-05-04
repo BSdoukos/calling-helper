@@ -27,6 +27,7 @@ class Contact {
 class Timing {
     constructor() {
         this.begin;
+        this.pauses = [];
         this.time = {hours: 0, minutes: 0, seconds: 0};
     }
 
@@ -39,7 +40,10 @@ class Timing {
     }
     
     update() {
-        const elapsedTime = Date.now() - this.begin;
+        let pauses = 0;
+        this.pauses.forEach((pause) => pauses += pause.duration);
+
+        const elapsedTime = Date.now() - this.begin - pauses;
 
         this.time.hours = Math.floor(elapsedTime / Timing.HOUR);
         this.time.minutes = Math.floor(elapsedTime % Timing.HOUR / Timing.MINUTE);
@@ -54,15 +58,100 @@ class Timing {
         return `${hours}:${minutes}:${seconds}`;
     }
 
-    // stop() {
+    pause() {
+        this.pauses.push({begin: Date.now()});
+    }
 
-    // }
+    resume() {
+        const lastPause = this.pauses[this.pauses.length - 1];
+
+        lastPause.end = Date.now();
+        lastPause.duration = lastPause.end - lastPause.begin;
+    }
 }
 
-// class DataAccess {
-//     constructor() {
-//         this.protocol = Date.now();
-//     }
+class Report {
+    constructor(isNew, publications, videos, returnVisits, time) {
+        this.isNew = isNew;
+        this.time = time;
+        this.publications = publications;
+        this.videos = videos;
+        this.returnVisits = returnVisits;
+    }
 
-//     get() 
-// }
+    save() {
+        if (this.isNew) {
+            localStorage.setItem('report', JSON.stringify({
+                time: this.time,
+                publications: this.publications,
+                videos: this.videos,
+                returnVisits: this.returnVisits
+            }));
+        } else {
+            const report = JSON.parse(localStorage.getItem('report'));
+
+            report.time.hours += this.time.hours;
+            report.time.minutes += this.time.minutes;
+            report.publications += this.publications;
+            report.videos += this.videos;
+            report.returnVisits += this.returnVisits;
+
+            localStorage.setItem('report', JSON.stringify(report));
+        }
+    }
+}
+
+class ListHandler {
+    constructor() {}
+
+    getPhoneNumber(list, number) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+
+        let requestedNumber;
+        list_.numbers.forEach((tel) => {
+            if (tel.number === number) {
+                requestedNumber = tel;
+            }
+        });
+
+        return requestedNumber;
+    }
+
+    editPhoneNumber(list, number, property, content) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+        const listIndex = phoneLists.indexOf(list_);
+        
+        list_.numbers.forEach((tel) => {
+            if (tel.number === number) {
+                tel[property] = content;
+            }
+        });
+        phoneLists[listIndex] = list_;
+
+        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
+    }
+
+    deletePhoneNumber(list, number) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+        const listIndex = phoneLists.indexOf(list_);
+
+        list_.numbers = list_.numbers.filter((tel) => tel.number !== number);
+        phoneLists[listIndex] = list_;
+
+        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
+    }
+
+    editList(list, property, content) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+        const listIndex = phoneLists.indexOf(list_);
+
+        list_[property] = content;
+        phoneLists[listIndex] = list_;
+
+        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
+    }
+}
