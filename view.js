@@ -42,7 +42,7 @@ class PhoneListView {
     }   
 
     displayPhoneList(name) {
-        $('#noListsInfo, #workContainer').addClass('hidden');
+        $('#noListsInfo, #workContainer, #listContainer .spinner-border').addClass('hidden');
         if ($('.phone-table, .list-related-btn').get().length) {
             $('.phone-table, .list-related-btn').remove();
         }

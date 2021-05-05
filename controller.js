@@ -63,6 +63,9 @@ class PhoneListController {
                     })
                 }
             }
+        } else {
+            $('#listContainer .spinner-border').addClass('d-none');
+            $('#noListsInfo').removeClass('hidden');
         }
     }
 

@@ -37,7 +37,7 @@
             </div>
         </nav>
     </header>
-    <main class="text-center py-5 px-2 d-lg-flex align-items-center position-relative">
+    <main class="text-center py-5 px-2 d-lg-flex align-items-center">
       <div class="container">
           <div class="mb-4 hidden mx-auto" id="workContainer">
             <h2 class="card-title h4 mb-4" id="currentNumber">(41) 98888-1129</h2>
@@ -59,11 +59,14 @@
             </div>
         </div>
         <div id="listContainer">
-          <div id="noListsInfo">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
+          <div id="noListsInfo" class="hidden">
             <h2 class="card-title h4 mb-3">Nova lista</h2>
             <p class="card-text mb-3">Você ainda não cadastrou nenhuma lista telefônica. Cadastre uma para começar.</p>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newListModal">Cadastrar</button>
-          </div>
+        </div>
         </div>
       </div>
     </main>
