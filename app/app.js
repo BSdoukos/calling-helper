@@ -53,7 +53,15 @@ $('#callAgain').on('change', function() {
 
 $('#submitContactBtn').on('click', function(e) {
     e.preventDefault();
-    app.registerContact();
+
+    const parentModal = $(this).parents('.modal');
+    
+    if(parentModal.attr('data-related-number')) {
+        app.registerContact(parentModal.attr('data-related-number'));
+        parentModal.removeAttr('data-related-number')
+    } else {
+        app.registerContact();
+    }
 });
 
 $('#startTimingBtn').on('click', function() {
@@ -118,7 +126,10 @@ $(document).on('click', '.number-row', function(e) {
     const targetRow = $(e.target).parents('.number-row');
 
     $('#numberInfoTel').text(targetRow.find('.number-cell').text());
-    $('#numberInfoStatus').text(targetRow.find('.status-cell').text());
+
+    const status = targetRow.find('.status-cell').html();
+    const statusInfo = ['Inexistente', 'Cx. postal', 'Falha', 'Ocupado', 'Desligado/sem serviço', '-'].some((s) => s === status) ? status : `Sucesso (contato com ${status})`;
+    $('#numberInfoStatus').html(statusInfo);
 
     const lastCall = listData.getPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text()).lastCall;
     const lastCallInfo = lastCall || '-';
@@ -140,10 +151,11 @@ $(document).on('click', '.number-row', function(e) {
 });
 
 $('#editInfoBtn, #saveChangesBtn').on('click', function() {
-    if (this.innerText === 'Editar') {
-        this.innerText = 'Cancelar';
+    const editBtn = $('#editInfoBtn');
+    if (editBtn.innerText === 'Editar') {
+        editBtn.innerText = 'Cancelar';
     } else {
-        this.innerText ='Editar';
+        editBtn.innerText ='Editar';
     }
     $('#saveChangesBtn, #statusInfoSelector, #numberInfoStatus').toggleClass('d-none');
 });
@@ -153,8 +165,14 @@ $('#saveChangesBtn').on('click', function() {
     const listsData = new ListHandler();
     const newStatus = $('#statusInfoSelector').val();
 
-    if (newStatus === '-') {
+    if (newStatus === '-') {   
         listsData.editPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text(), 'lastCall', '-');
+
+    } else if (newStatus === 'Sucesso') {
+        $('#contactCreationModal').attr('data-related-number', $(this).parents('.modal').find('#numberInfoTel').text());
+        $('#contactCreationModal').modal('show');
+        app.displayUserData();
+        return;
     }
 
     listsData.editPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text(), 'status', newStatus);

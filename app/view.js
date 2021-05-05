@@ -104,8 +104,8 @@ class PhoneListView {
         $('#callBtn').attr('href', `tel:55${$('.phone-table tr.current .number-cell').text().replace(/[\(\)\s\-]/g, '')}`);
     }
 
-    displayNewNumberStatus(status) {
-        $(`.phone-table .number-cell:contains("${$('#currentNumber').text()}") + .status-cell`).html(status);
+    displayNewNumberStatus(status, number = $('#currentNumber').text()) {
+        $(`.phone-table .number-cell:contains("${number}") + .status-cell`).html(status);
 
         if ($('.phone-table .status-cell').get().every((cell) => $(cell).text() !== '-')) {
             $('#addNumbersBtn').attr('disabled', true);

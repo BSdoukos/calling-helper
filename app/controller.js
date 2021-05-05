@@ -56,6 +56,7 @@ class PhoneListController {
                     addNumbersBtn.wrap(`
                         <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="Não é possível adicionar números a listas que já estão completas. Crie uma nova lista para adicionar novos números."></span>
                     `);
+
                     // Bootstrap script for initializing popovers
                         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
                         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
@@ -135,9 +136,13 @@ class PhoneListController {
         this.displayUserData();
     }
 
-    registerContact() {
-        this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`);
-        this.view.changeCurrentItem();
+    registerContact(number) {
+        if (number) {
+            this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`, number);
+        } else {
+            this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`);
+            this.view.changeCurrentItem();
+        }
         this.model.registerPhoneList();
         this.view.updateWorkContainer();
         this.displayLists();
