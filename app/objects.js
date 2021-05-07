@@ -155,3 +155,22 @@ class ListHandler {
         localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
     }
 }
+
+class ContactList {
+    constructor(){}
+
+    get() {
+        const contacts = JSON.parse(localStorage.getItem('contacts'));
+
+        if (contacts) {
+            const names = contacts.map((contact) => contact.name).sort();
+            let sortedContacts;
+    
+            names.forEach((name) => {
+                sortedContacts.push(contacts.filter((contact) => contacts.name === name)[0]);
+            });
+    
+            return sortedContacts;
+        }
+    }
+}

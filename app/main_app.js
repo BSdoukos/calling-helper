@@ -1,6 +1,6 @@
 const app = new PhoneListController(new PhoneListModel(), new PhoneListView());
 
-$(document).ready(app.displayUserData.bind(app));
+app.displayUserData();
 
 $('#listName').on('input', function() {
     app.view.validateInput('simple', '#newListModal form');

@@ -1,6 +1,5 @@
 class PhoneListModel {
-    constructor() {
-    }
+    constructor() {}
 
     registerPhoneList() {
         if (!localStorage.getItem('phoneLists')) localStorage.setItem('phoneLists', JSON.stringify([]));
