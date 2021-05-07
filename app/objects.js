@@ -1,7 +1,8 @@
 class Contact {
-    constructor(name, number, conversations) {
+    constructor(name, number, lastCall, conversations) {
         this.name = name;
         this.number = number;
+        this.lastCall = lastCall;
         this.conversations = conversations;
         this.id = Date.now();
     }
@@ -12,7 +13,7 @@ class Contact {
         }
 
         const contacts = JSON.parse(localStorage.getItem('contacts'));
-        const newContact = {name: this.name, number: this.number, conversations: this.conversations, id: this.id};
+        const newContact = {name: this.name, number: this.number, lastCall: this.lastCall, conversations: this.conversations, id: this.id};
         const oldContact = contacts.some((contact) => contact.name === newContact.name);
 
         if (oldContact) {

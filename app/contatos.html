@@ -47,9 +47,30 @@
                 <p class="mx-auto">Você ainda não tem nenhum contato. Você pode criar contatos ao trabalhar com suas listas e realizar ligações telefônicas.</p>
                 <a href="../app/app.html" class="btn btn-primary">Ir para minhas listas</a>
             </div>
-            <ul class="card-list list-unstyled d-none" id="contactList"></ul>
+            <div id="contactContainer" class="d-none">
+                <h1 class="h3 mb-3">Contatos</h1>
+                <ul class="card-list list-unstyled mx-3 mt-4" id="contactList">
+                </ul>
+            </div>
         </div>
     </main>
+
+    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title h5" id="contactModalTitle">Gerenciar listas</h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-center mt-4">
+                <button class="btn btn-primary mx-1 list-managing-btn" id="editContactBtn" data-bs-dismiss="modal">Editar</button>
+                <button class="btn btn-danger mx-1 list-managing-btn" id="removeContactBtn" data-bs-dismiss="modal">Excluir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>

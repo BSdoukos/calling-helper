@@ -1,7 +1,17 @@
-.card-list {
+.card-list--grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 1.25rem;
+}
+
+.card-list__item {
+    max-width: 640px;
+    margin: auto;
+}
+
+.card-list--grid .card-list__item {
+    max-width: initial;
+    margin: initial;
 }
 
 #noContactsInfo {
