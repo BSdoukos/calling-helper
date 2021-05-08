@@ -1,10 +1,16 @@
 class Contact {
-    constructor(name, number, lastCall, conversations) {
+    constructor(name, number, lastCall, conversations, id = Date.now()) {
         this.name = name;
         this.number = number;
         this.lastCall = lastCall;
         this.conversations = conversations;
-        this.id = Date.now();
+        this.id = id;
+    }
+
+    static get(id) {
+        const storedData = JSON.parse(localStorage.getItem('contacts')).filter((contact) => contact.id === id)[0];
+
+        return new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.conversations, storedData.id);
     }
 
     save() {
