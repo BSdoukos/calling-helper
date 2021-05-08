@@ -86,8 +86,8 @@ class PhoneListModel {
     }
 
     createContact() {
-        const lastCall = JSON.parse(localStorage.getItem('phoneLists')[JSON.parse(localStorage.getItem('activeList'))]).numbers.filter((tel) => tel.number === $('#currentNumber').text());
-
+        const lastCall = JSON.parse(localStorage.getItem('phoneLists'))[JSON.parse(localStorage.getItem('activeList'))].numbers.filter((tel) => tel.number === $('#currentNumber').text())[0].lastCall;
+        debugger
         const contact = new Contact($('#contactName').val(), $('#currentNumber').text(), lastCall, [
             {
                 topic: $('#firstTalkTopic').val(),

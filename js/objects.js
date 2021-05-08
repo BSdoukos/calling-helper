@@ -168,7 +168,7 @@ class ContactList {
             let sortedContacts;
     
             names.forEach((name) => {
-                sortedContacts.push(contacts.filter((contact) => contacts.name === name)[0]);
+                sortedContacts.push(contacts.filter((contact) => contact.name === name)[0]);
             });
     
             return sortedContacts;

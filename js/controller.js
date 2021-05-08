@@ -110,7 +110,6 @@ class PhoneListController {
                 timeData[n] = '0' + timeData[n];
             }
         }
-
         listData.editPhoneNumber($('#titleCell').text(), $('#currentNumber').text(), 'lastCall', `${timeData.day}/${timeData.month}/${timeData.year} ${timeData.hours}:${timeData.minutes}`);
     }
 
@@ -137,12 +136,15 @@ class PhoneListController {
     }
 
     registerContact(number) {
+        this.setNumberCallTime();
+
         if (number) {
             this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`, number);
         } else {
             this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`);
             this.view.changeCurrentItem();
         }
+        
         this.model.registerPhoneList();
         this.view.updateWorkContainer();
         this.displayLists();
