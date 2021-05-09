@@ -49,3 +49,35 @@ $(document).ready(() => {
         contact.displayData('#contactModal', selector.find(`option:contains("${selector.val()}")`).index());
     });
 })();
+
+// Edição de contatos
+(function() {
+    // Localiza os elementos que contém informações editáveis
+    const editableInfo = ['name', 'number', 'topic', 'text'];
+    const editableElements = [];
+
+    editableInfo.forEach((info) => editableElements.push($(`[data-contact-info="${info}"]`)));
+
+    $('#editContactBtn').on('click', function() {
+        // Transforma os elementos em campos de texto
+        editableElements.forEach((el) => {
+            const inputType = el.attr('data-contact-info') === 'number' ? 'tel' : 'text';      
+            el.replaceWith(`<input type="${inputType}" value="${el.text()}" class="form-control mt-2 mb-3" data-contact-info="${el.data('contact-info')}"></input>`);
+        });
+
+        // Exibe os botões "Salvar mudanças" e "Cancelar" e esconde o botão "Editar"
+        $('#saveContactChangesBtn, #cancelContactChangesBtn').removeClass('d-none');
+        $('#editContactBtn').addClass('d-none');
+    });
+
+    $('#cancelContactChangesBtn').on('click', function() {
+        const editedElements = $('#contactModal input[data-contact-info]');
+
+        editedElements.each((i, el) => {
+            el.replaceWith(editableElements[i].get(0));
+        });
+
+        $('#saveContactChangesBtn, #cancelContactChangesBtn').addClass('d-none');
+        $('#editContactBtn').removeClass('d-none');
+    });
+})();

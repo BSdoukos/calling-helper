@@ -36,12 +36,21 @@ class Contact {
 
             if (this[dataContactInfo]) {
                 if (dataContactInfo !== 'conversations') {
-                    el.innerText = this[dataContactInfo];
+                    if (el.tagName !== 'INPUT') {
+                        el.innerText = this[dataContactInfo];
+                    } else {
+                        el.value = this[dataContactInfo];
+                    }
                 } else {
                     const conversationsElements = $(el).find('[data-contact-info]');
 
                     conversationsElements.each(function(_i, element) {
-                        $(element).text(this.conversations[conversationIndex][$(element).attr('data-contact-info')]);
+                        const content = this.conversations[conversationIndex][$(element).attr('data-contact-info')];
+                        if (element.tagName !== 'INPUT') {
+                            $(element).text(content);
+                        } else {
+                            $(element).val(content);
+                        }
                     }.bind(this));
                 }
             }
