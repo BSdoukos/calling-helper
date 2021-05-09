@@ -1,12 +1,12 @@
-.card-list--grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
-    grid-gap: 1.25rem;
+.card-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .card-list__item {
-    max-width: 500px;
-    margin: auto;
+    width: 100%;
 }
 
 .card-list--grid .card-list__item {
@@ -16,4 +16,16 @@
 
 #noContactsInfo {
     max-width: 485px;
+}
+
+@media only screen and (min-width: 765px) {
+    .card-list__item {
+        width: calc(50% - 0.5rem);
+    }    
+}
+
+@media only screen and (min-width: 1024px) {
+    .card-list__item {
+        width: calc(33% - 0.67rem);
+    }    
 }
