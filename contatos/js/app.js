@@ -8,9 +8,6 @@ $(document).ready(() => {
         $('#contactContainer').removeClass('d-none');
 
         contacts.forEach((contact) => {
-            if (!contactList.hasClass('card-list--grid') && contactList.find('div').length > 0) {
-                contactList.addClass('card-list--grid');
-            }
             contactList.append(`
                 <li class="card-list__item" data-contact-id="${contact.id}">
                     <div class="card">
