@@ -29,6 +29,42 @@ class Contact {
         contacts.push(newContact);
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
+
+    displayData(mainElementSelector, conversationIndex = this.conversations.length - 1) {
+        Array.from($(mainElementSelector).get(0).querySelectorAll('[data-contact-info]')).forEach((el) => {
+            const dataContactInfo = el.getAttribute('data-contact-info');
+
+            if (this[dataContactInfo]) {
+                if (dataContactInfo !== 'conversations') {
+                    el.innerText = this[dataContactInfo];
+                } else {
+                    const conversationsElements = $(el).find('[data-contact-info]');
+
+                    conversationsElements.each(function(_i, element) {
+                        $(element).text(this.conversations[conversationIndex][$(element).attr('data-contact-info')]);
+                    }.bind(this));
+                }
+            }
+        });
+
+        const conversationSelector = $(mainElementSelector).find('.conversation-selector');
+
+        conversationSelector.html('');
+
+        this.conversations.forEach((conv, i) => {      
+            let conversationName;
+
+            if (i > 0) {
+                conversationName = `${i}ª revisita`;
+            } else {
+                conversationName = '1ª conversa';
+            }
+
+            conversationSelector.append(`<option>${conversationName}</option>`)
+        });
+
+        $(conversationSelector.find('option')[conversationIndex]).prop('selected', true);
+    }
 }
 
 class Timing {

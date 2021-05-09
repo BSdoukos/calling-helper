@@ -28,24 +28,24 @@ $(document).ready(() => {
 // Visualização de contatos
 (function() {
     $(document).on('click', '.contact-viewing-btn', function(e) {
+        // Sinaliza o cartão de contato selecionado como ativo
+        $('.card-list__item.active').removeClass('active');
+        $(e.target).parents('.card-list__item').addClass('active');
+
         // Coleta o ID do contato solicitado e o busca no localStorage
         const contact = Contact.get(parseInt($(e.target).parents('[data-contact-id]').attr('data-contact-id')));
 
         // Exibe as informações do contato no modal "Dados do contato"
-        Array.from(document.querySelectorAll('[data-contact-info]')).forEach((el) => {
-            const dataContactInfo = el.getAttribute('data-contact-info');
+        contact.displayData('#contactModal');
+    });
+})();
 
-            if (contact[dataContactInfo]) {
-                if (dataContactInfo !== 'conversations') {
-                    el.innerText = contact[dataContactInfo];
-                } else {
-                    const conversationsElements = $(el).find('[data-contact-info]');
+// Visualização de conversas
+(function() {
+    $(document).on('change', '#contactModal .conversation-selector', function() {
+        const contact = Contact.get(parseFloat($('.card-list__item.active').attr('data-contact-id')));
+        const selector = $('#contactModal .conversation-selector');
 
-                    conversationsElements.each(function(i, element) {
-                        $(element).text(contact.conversations[contact.conversations.length - 1][$(element).attr('data-contact-info')]);
-                    });
-                }
-            }
-        });
+        contact.displayData('#contactModal', selector.find(`option:contains("${selector.val()}")`).index());
     });
 })();

@@ -72,9 +72,7 @@
               <p data-contact-info="lastCall"></p>
 
               <h4 class="fw-bold h6 mb-2">Conversas</h4>
-              <select class="form-select" aria-label="Selecione a conversa cujas informações você deseja acessar">
-                <option selected>Primeira conversa</option>
-              </select>
+              <select class="form-select conversation-selector" aria-label="Selecione a conversa cujas informações você deseja acessar"></select>
 
               <div class="border mt-2 p-3" data-contact-info="conversations">
                 <h4 class="fw-bold h6 mb-1">Tema</h4>
@@ -111,14 +109,20 @@
           name: 'João',
           number: '(41) 98888-1129',
           lastCall: '04/02/2021 16:46',
-          conversations: [{topic: 'Será que Deus causa o sofrimento?', text: 'Jó 34:10'}],
+          conversations: [
+            {topic: 'Será que Deus causa o sofrimento?', text: 'Jó 34:10'},
+            {topic: 'Quem causa o sofrimento?', text: 'João 5:19'}
+          ],
           id: 10151315886
         },
         {
           name: 'Rogério',
           number: '(41) 98888-1130',
           lastCall: '04/02/2021 16:47',
-          conversations: [{topic: 'Será que Deus causa o sofrimento?', text: 'Jó 34:10'}],
+          conversations: [
+            {topic: 'Será que Deus causa o sofrimento?', text: 'Jó 34:10'},
+            {topic: 'Quem causa o sofrimento?', text: 'João 5:19'}
+          ],
           id: 10151315887
         }
       ]));
