@@ -13,6 +13,31 @@ class Contact {
         return new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.conversations, storedData.id);
     }
 
+    static remove(id) {
+        const contacts = JSON.parse(localStorage.getItem('contacts'));
+        const requestedContact = contacts.filter((contact) => contact.id === id)[0];
+
+        contacts.splice(contacts.indexOf(requestedContact), 1);
+
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+
+    merge(contact2, conflictSolutionType = 'replace') {
+        if (conflictSolutionType === 'replace') {
+            this.name = contact2.name;
+            this.number = contact2.number;
+            this.lastCall = contact2.lastCall;
+        }
+
+        contact2.conversations.forEach((conv, i) => {
+            if (this.conversations[i] === undefined || (conflictSolutionType === 'replace' && conv !== undefined)) {
+                this.conversations[i] = conv;
+            }
+        });
+
+        return this;
+    }
+
     save() {
         if (!localStorage.getItem('contacts')) {
             localStorage.setItem('contacts', JSON.stringify([]));
@@ -20,13 +45,9 @@ class Contact {
 
         const contacts = JSON.parse(localStorage.getItem('contacts'));
         const newContact = {name: this.name, number: this.number, lastCall: this.lastCall, conversations: this.conversations, id: this.id};
-        const oldContact = contacts.some((contact) => contact.name === newContact.name);
-
-        if (oldContact) {
-            contacts.splice(contacts.indexOf(oldContact), contacts.indexOf(oldContact) + 1)
-        }
 
         contacts.push(newContact);
+        
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
 
@@ -60,7 +81,7 @@ class Contact {
 
         conversationSelector.html('');
 
-        this.conversations.forEach((conv, i) => {      
+        this.conversations.forEach((_conv, i) => {      
             let conversationName;
 
             if (i > 0) {
@@ -75,7 +96,6 @@ class Contact {
         $(conversationSelector.find('option')[conversationIndex]).prop('selected', true);
     }
 }
-
 class Timing {
     constructor() {
         this.begin;
@@ -205,24 +225,5 @@ class ListHandler {
         phoneLists[listIndex] = list_;
 
         localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
-    }
-}
-
-class ContactList {
-    constructor(){}
-
-    get() {
-        const contacts = JSON.parse(localStorage.getItem('contacts'));
-
-        if (contacts) {
-            const names = contacts.map((contact) => contact.name).sort();
-            let sortedContacts;
-    
-            names.forEach((name) => {
-                sortedContacts.push(contacts.filter((contact) => contact.name === name)[0]);
-            });
-    
-            return sortedContacts;
-        }
     }
 }

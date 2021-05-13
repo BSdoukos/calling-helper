@@ -25,7 +25,7 @@ $(document).ready(() => {
     }
 });
 
-// Visualização de contatos
+/// Visualização de contatos
 (function() {
     $(document).on('click', '.contact-viewing-btn', function(e) {
         // Sinaliza o cartão de contato selecionado como ativo
@@ -52,7 +52,6 @@ $(document).ready(() => {
 
 // Edição de contatos
 (function() {
-    // Localiza os elementos que contém informações editáveis
     const editableInfo = ['name', 'number', 'topic', 'text'];
     const editableElements = [];
 
@@ -66,11 +65,21 @@ $(document).ready(() => {
         });
 
         // Exibe os botões "Salvar mudanças" e "Cancelar" e esconde o botão "Editar"
-        $('#saveContactChangesBtn, #cancelContactChangesBtn').removeClass('d-none');
-        $('#editContactBtn').addClass('d-none');
+        $('#saveContactChangesBtn').removeClass('d-none');
+        $('#cancelContactChangesBtn').removeClass('d-none');
+        $('#editContactBtn').removeClass('d-none');
     });
 
-    $('#cancelContactChangesBtn').on('click', function() {
+    $(document).on('input', '#contactModal input[data-contact-info]', function() {
+        // Impede que campos vazios sejam submetidos
+        if ($('#contactModal input[data-contact-info]').get().some((input) => !input.value.length)) {
+            $('#saveContactChangesBtn').prop('disabled', true);
+        } else {
+            $('#saveContactChangesBtn').prop('disabled', false);
+        }
+    });
+
+    window.disableEdition = function() {
         const editedElements = $('#contactModal input[data-contact-info]');
 
         editedElements.each((i, el) => {
@@ -79,5 +88,91 @@ $(document).ready(() => {
 
         $('#saveContactChangesBtn, #cancelContactChangesBtn').addClass('d-none');
         $('#editContactBtn').removeClass('d-none');
+
+        window.editedConversations = null;
+    }
+
+    // Ativa o botão "Cancelar"
+    $('#cancelContactChangesBtn').on('click', function(e) {
+        disableEdition();
+    });
+
+    // Edição de mais de uma conversa
+    $(document).on('input', '[data-contact-info="conversations"] [data-contact-info]', () => {
+        if (!this.editedConversations) {
+            this.editedConversations = [];
+        }
+
+        const conversationInputs = $('[data-contact-info="conversations"] [data-contact-info]');
+
+        const edition = {
+            name: conversationInputs.parents('#contactModal').find('.conversation-selector').val(),
+            topic: $('[data-contact-info="topic"]').val(),
+            text: $('[data-contact-info="text"]').val()
+        };
+
+        const prevEdition = this.editedConversations.filter((conv) => conv.name === edition.name)[0];
+
+        
+        if (prevEdition) {
+            this.editedConversations[this.editedConversations.indexOf(prevEdition)] = edition;
+        } else {
+            this.editedConversations.push(edition);
+        }
+    });
+})();
+
+// Atualização de contatos
+(function(){
+    $('#saveContactChangesBtn').on('click', function() {
+        const newInfo = {}
+
+        $('#contactModal [data-contact-info]').each((i, el) => {
+            const elementLabel = el.getAttribute('data-contact-info');
+
+            if (['conversations', 'topic', 'text'].every((label) => elementLabel !== label)) {
+                if (el.tagName === 'INPUT') {
+                    newInfo[elementLabel] = el.value;
+                } else {
+                    newInfo[elementLabel] = el.innerText;
+                }
+            }
+        });
+
+        if (window.editedConversations) {
+            newInfo.conversations = [];
+
+            const firstConversation = editedConversations.filter((conv) => conv.name === '1ª conversa')[0];
+            if (firstConversation) {
+                newInfo.conversations[0] = {
+                    topic: firstConversation.topic,
+                    text: firstConversation.text
+                };
+            }
+
+            const returnVisits = editedConversations.filter((conv) => conv.name.match(/\d+ª revisita/g));
+            if (returnVisits) {
+                returnVisits.forEach((conv) => {
+                    newInfo.conversations[conv.name.match(/\d+/g)[0]] = {
+                        topic: conv.topic,
+                        text: conv.text
+                    };
+                });
+            }
+
+        } else {
+            newInfo.conversations = Contact.get($('.card-list__item.active').data('contact-id')).conversations;        
+        }
+
+        let contact = new Contact(newInfo.name, newInfo.number, newInfo.lastCall, newInfo.conversations);
+        
+        contact = Contact.get($('.card-list__item.active').data('contact-id')).merge(contact);
+        console.log(contact);
+        Contact.remove($('.card-list__item.active').data('contact-id'));
+        contact.save();
+
+        disableEdition();
+
+        contact.displayData('#contactModal');
     });
 })();
