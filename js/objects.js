@@ -51,12 +51,12 @@ class Contact {
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
 
-    displayData(mainElementSelector, conversationIndex = this.conversations.length - 1) {
+    displayData(mainElementSelector, onlyConversations = false, conversationIndex = this.conversations.length - 1) {
         Array.from($(mainElementSelector).get(0).querySelectorAll('[data-contact-info]')).forEach((el) => {
             const dataContactInfo = el.getAttribute('data-contact-info');
 
             if (this[dataContactInfo]) {
-                if (dataContactInfo !== 'conversations') {
+                if (dataContactInfo !== 'conversations' && !onlyConversations) {
                     if (el.tagName !== 'INPUT') {
                         el.innerText = this[dataContactInfo];
                     } else {

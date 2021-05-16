@@ -80,13 +80,19 @@
 
                 <h4 class="fw-bold h6 mb-1 mt-3">Texto lido</h4>
                 <p data-contact-info="text" class="mb-0"></p>
+
+                <button class="btn btn-primary d-none mx-auto contact-view-btn conversation-creation-btn create-conversation-btn">Nova conversa</button>
+                <div class="text-center conversation-creation-btn d-none">
+                  <button class="btn btn-primary save-conversation-btn mx-1">Salvar</button>
+                  <button class="btn btn-light text-primary cancel-conversation-btn mx-1">Cancelar</button>
+                </div>
               </div>
 
               <div class="text-center mt-4">
-                <button class="btn btn-primary mx-1 list-managing-btn" id="editContactBtn">Editar</button>
-                <button class="btn btn-primary mx-1 list-managing-btn d-none" id="saveContactChangesBtn">Salvar mudanças</button>
-                <button class="btn btn-primary mx-1 list-managing-btn d-none" id="cancelContactChangesBtn">Cancelar</button>
-                <button class="btn btn-danger mx-1 list-managing-btn" id="removeContactBtn" data-bs-dismiss="modal">Excluir</button>
+                <button class="btn btn-primary mx-1 contact-view-btn edit-contact-btn">Editar</button>
+                <button class="btn btn-primary mx-1 contact-view-btn d-none save-contact-changes-btn" data-bs-dismiss="modal">Salvar mudanças</button>
+                <button class="btn btn-light text-primary mx-1 contact-view-btn d-none cancel-contact-changes-btn">Cancelar</button>
+                <button class="btn btn-danger mx-1 contact-view-btn delete-contact-btn" data-bs-dismiss="modal">Excluir</button>
               </div>
             </div>
           </div>
@@ -96,6 +102,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <script src="../js/objects.js"></script>
+    <script src="js/contactView.js"></script>
     <script src="js/app.js"></script>
     <script>
       // Simulação do localStorage
