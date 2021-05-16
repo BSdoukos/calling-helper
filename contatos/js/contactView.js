@@ -197,5 +197,18 @@ class ContactView {
             this.contact.displayData(`#${this.container.get(0).id}`, true);
             this.disableConversationCreation();
         }.bind(this));
+
+        this.container.find('button.btn-close[data-bs-dismiss="modal"]').off().on('click', function() {
+            const editionInputs = this.container.find('input[data-contact-info]');
+
+            if (editionInputs.length) {
+                if (!this.buttons.saveConversation.parent().hasClass('d-none')) {
+                    this.disableConversationCreation();
+                }
+                this.disableEdition();
+                this.toggleButtons();
+            }
+
+        }.bind(this));
     }
 }
