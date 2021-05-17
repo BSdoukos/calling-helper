@@ -7,6 +7,14 @@ class Contact {
         this.id = id;
     }
 
+    static createFrom(obj) {
+        if (['name', 'number', 'lastCall', 'conversations'].every((prop) => obj[prop])) {
+            return new Contact(...Object.values(obj));
+        } else {
+            console.error(new Error('Um objeto tentou ser convertido em contato, porém o mesmo não possui as propriedades necessárias.'));
+        }
+    }
+
     static get(id) {
         const storedData = JSON.parse(localStorage.getItem('contacts')).filter((contact) => contact.id === id)[0];
 
@@ -67,10 +75,12 @@ class Contact {
 
                     conversationsElements.each(function(_i, element) {
                         const content = this.conversations[conversationIndex][$(element).attr('data-contact-info')];
-                        if (element.tagName !== 'INPUT') {
-                            $(element).text(content);
-                        } else {
-                            $(element).val(content);
+                        if (content) {
+                            if (element.tagName !== 'INPUT') {
+                                $(element).text(content);
+                            } else {
+                                $(element).val(content);
+                            }
                         }
                     }.bind(this));
                 }
@@ -81,16 +91,18 @@ class Contact {
 
         conversationSelector.html('');
 
-        this.conversations.forEach((_conv, i) => {      
-            let conversationName;
+        this.conversations.forEach((conv, i) => {      
+            if (conv !== 'deleted') {
+                let conversationName;
 
-            if (i > 0) {
-                conversationName = `${i}ª revisita`;
-            } else {
-                conversationName = '1ª conversa';
+                if (i > 0) {
+                    conversationName = `${i}ª revisita`;
+                } else {
+                    conversationName = '1ª conversa';
+                }
+    
+                conversationSelector.append(`<option>${conversationName}</option>`)
             }
-
-            conversationSelector.append(`<option>${conversationName}</option>`)
         });
 
         $(conversationSelector.find('option')[conversationIndex]).prop('selected', true);
