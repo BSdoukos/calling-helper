@@ -7,10 +7,12 @@ class ContactView {
             edit: this.container.find('.edit-contact-btn'),
             cancel: this.container.find('.cancel-contact-changes-btn'),
             save: this.container.find('.save-contact-changes-btn'),
+            delete: this.container.find('.delete-contact-btn'),
             createConversation: this.container.find('.create-conversation-btn'),
             cancelConversation: this.container.find('.cancel-conversation-btn'),
             saveConversation: this.container.find('.save-conversation-btn'),
-            deleteConversation: this.container.find('.delete-conversation-btn')
+            deleteConversation: this.container.find('.delete-conversation-btn'),
+            undoContactDeletion: $('.undo-contact-deletion-btn')
         }
     }
 
@@ -117,6 +119,14 @@ class ContactView {
         this.editedContact.conversations.pop();
     }
 
+    showContactDeletionAlert() {
+        this.buttons.undoContactDeletion.parent('.alert').removeClass('d-none').addClass('d-flex');
+
+        setTimeout(() => {
+            this.buttons.undoContactDeletion.parent('.alert').addClass('d-none').removeClass('d-flex');
+        }, 10000);
+    }
+
     open() {
         // Exibe as informações do contato
         this.contact.displayData(`#${this.container.get(0).id}`);
@@ -154,6 +164,13 @@ class ContactView {
             this.contact.displayData(`#${this.container.get(0).id}`);
             this.toggleButtons();
             displayContacts();
+        }.bind(this));
+
+        this.buttons.delete.off().on('click', function() {
+            Contact.remove(this.contact.id);
+            displayContacts();
+            window.recentlyDeletedContact = this.contact;
+            this.showContactDeletionAlert();
         }.bind(this));
 
         this.buttons.createConversation.off().on('click', this.enableConversationCreation.bind(this));

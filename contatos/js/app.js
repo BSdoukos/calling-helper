@@ -34,7 +34,7 @@ $(document).ready(() => {
     displayContacts();
 });
 
-/// Visualização de contatos
+// Visualização de contatos
 (function() {
     $(document).on('click', '.contact-viewing-btn', function(e) {
         // Sinaliza o cartão de contato selecionado como ativo
@@ -46,5 +46,13 @@ $(document).ready(() => {
    
         const modal = new ContactView(contact, $('#contactModal'));
         modal.open();
+    });
+
+    $('.undo-contact-deletion-btn').on('click', function() {
+        const contacts = JSON.parse(localStorage.getItem('contacts'));
+        contacts.push(window.recentlyDeletedContact);
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+        displayContacts();
+        $(this).parent('.alert').removeClass('d-flex').addClass('d-none');
     });
 })();
