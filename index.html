@@ -16,25 +16,32 @@
 <body>
     <header class="border-bottom">
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
-            <a class="navbar-brand ms-4" href="#">Bruno Sdoukos</a>
+            <a class="navbar-brand" href="#">Bruno Sdoukos</a>
             <button class="navbar-toggler me-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav text-center border-top w-100 mt-3 pt-2 p-lg-0 m-lg-0 d-lg-flex justify-content-center">
-                <li class="nav-item py-2 mx-lg-4">
-                <a class="nav-link active" aria-current="page" href="index.html">Minhas listas</a>
-                </li>
-                <li class="nav-item py-2 mx-lg-4">
-                <a class="nav-link" href="contatos/contatos.html">Contatos</a>
-                </li>
-                <li class="nav-item py-2 mx-lg-4">
-                <a class="nav-link" href="#">Configurações</a>
-                </li>
-                <li class="nav-item py-2 mx-lg-4">
-                <a class="nav-link">Ajuda</a>
-                </li>
-            </ul>
+              <ul class="navbar-nav text-center border-top w-100 mt-3 pt-2 p-lg-0 m-lg-0 d-lg-flex justify-content-center">
+                  <li class="nav-item py-2 mx-lg-4">
+                    <a class="nav-link active" aria-current="page" href="index.html">Minhas listas</a>
+                  </li>
+                  <li class="nav-item py-2 mx-lg-4">
+                    <a class="nav-link" href="contatos/contatos.html">Contatos</a>
+                  </li>
+                  <li class="nav-item py-2 mx-lg-4">
+                    <a class="nav-link" href="#">Configurações</a>
+                  </li>
+                  <li class="nav-item py-2 mx-lg-4">
+                    <a class="nav-link">Ajuda</a>
+                  </li>
+                </ul>
+                <a class="scheduled-calls-link d-flex align-items-center position-absolute text-secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                    <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                  </svg>
+                  <span class="scheduled-calls-badge badge rounded-pill bg-primary position-absolute"></span>
+                </a>
             </div>
         </nav>
     </header>
@@ -187,10 +194,6 @@
                     <label for="nextTalkTime" class="form-label">Horário</label>
                     <input type="time" class="form-control next-talk-input" id="nextTalkTime" aria-disabled="true" disabled>
                   </div>
-                  <div class="mb-3">
-                    <input type="checkbox" class="me-1 next-talk-input" id="rememberViaEmail" aria-disabled="true" disabled>
-                    <label for="rememberViaEmail" class="form-label">Lembre-me via e-mail</label>
-                  </div>
                   <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary" id="submitContactBtn" data-bs-dismiss="modal" disabled>Registrar</button>
                   </div>
@@ -235,7 +238,7 @@
           <p id="numberInfoLastCall"></p>
 
           <h5 class="fs-6 fw-bold">Status</h5>
-          <p id="numberInfoStatus"></p>
+          <p id="numberInfoStatus" class="mb-4"></p>
           <select class="form-select mb-4 d-none" id="statusInfoSelector" aria-label="Seletor de status do número">
             <option value="-">-</option>
             <option value="Sucesso">Sucesso</option>
@@ -245,6 +248,7 @@
             <option value="Falha">Falha</option>
             <option value="Ocupado">Ocupado</option>
           </select>
+
           <div class="text-center">
             <button class="btn btn-primary mx-1 d-none" id="saveChangesBtn" data-bs-dismiss="modal">Salvar mudanças</button>
             <button class="btn btn-primary mx-1" id="editInfoBtn">Editar</button>

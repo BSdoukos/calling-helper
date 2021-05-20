@@ -5,9 +5,16 @@ body {
     min-height: 100%;
     padding-bottom: 72px;
 }
-footer {
-    height: 72px;
-    background-color: #f8f9fa;
+.navbar-brand {
+    margin-left: 2rem;
+}
+.scheduled-calls-link {
+    right: 2rem;
+    cursor: pointer;
+}
+.scheduled-calls-badge {
+    top: -7.5px;
+    left: -12.5px;
 }
 .hidden {
     display: none;
@@ -35,6 +42,10 @@ footer {
 }
 .phone-table tbody td {
     width: 50%;
+}
+footer {
+    height: 72px;
+    background-color: #f8f9fa;
 }
 
 @media only screen and (min-width: 992px) {
