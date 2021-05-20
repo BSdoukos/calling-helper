@@ -39,9 +39,24 @@ class PhoneListController {
 
                 userData.activeList.numbers.forEach((number) => {
                     if (['Inexistente', 'Cx. postal', 'Falha', 'Ocupado', 'Desligado/sem serviço', '-'].some((status) => status === number.status)) {
-                        this.view.appendNumber(number.number, number.status, false);
+                        const contacts =  JSON.parse(localStorage.getItem('contacts'));
+                        const attachedContact = contacts.filter((contact) => contact.number === number.number)[0];
+                        const status = attachedContact ? `<a class="link-primary">${attachedContact.name}</a>` : number.status;
+
+                        if (status !== number.status) {
+                            new ListHandler(userData.activeList.name, number.number, 'status', attachedContact.id);
+                        }
+
+                        this.view.appendNumber(number.number, status, false);
                     } else {
-                        this.view.appendNumber(number.number, `<a class="link-primary">${number.status}</a>`, false);
+                        const attachedContact = Contact.get(parseInt(number.status));
+                        const status = attachedContact.number === number.number ? `<a class="link-primary">${attachedContact.name}</a>` : '-';
+
+                        if (status === '-') {
+                            new ListHandler(userData.activeList.name, number.number, 'status', status);
+                        }
+
+                        this.view.appendNumber(number.number, status, false);
                     }
                 });
 
@@ -138,16 +153,20 @@ class PhoneListController {
     registerContact(number) {
         this.setNumberCallTime();
 
+        const contact = this.model.createContact();
+
         if (number) {
-            this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`, number);
+            this.view.displayNewNumberStatus(`<a class="link-primary">${contact.id}</a>`, number);
         } else {
-            this.view.displayNewNumberStatus(`<a class="link-primary">${this.model.createContact().name}</a>`);
+            this.view.displayNewNumberStatus(`<a class="link-primary">${contact.id}</a>`);
             this.view.changeCurrentItem();
         }
         
         this.model.registerPhoneList();
         this.view.updateWorkContainer();
-        this.displayLists();
+        this.displayUserData();
+
+        return contact;
     }
 
     deleteNumber() {

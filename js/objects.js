@@ -239,3 +239,23 @@ class ListHandler {
         localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
     }
 }
+
+class Scheduling {
+    constructor(contact, topic, date, time) {
+        this.data = {contact, topic, date, time};
+    }
+
+    save() {
+        let schedule = localStorage.getItem('schedule');
+
+        if (!schedule) {
+            schedule = [];
+        } else {
+            schedule = JSON.parse(schedule);
+        }
+
+        schedule.push(this.data);
+
+        localStorage.setItem('schedule', JSON.stringify(schedule));
+    }
+}

@@ -55,12 +55,18 @@ $('#submitContactBtn').on('click', function(e) {
     e.preventDefault();
 
     const parentModal = $(this).parents('.modal');
+
+    let contactID;
     
     if(parentModal.attr('data-related-number')) {
-        app.registerContact(parentModal.attr('data-related-number'));
+        contactID = app.registerContact(parentModal.attr('data-related-number')).id;
         parentModal.removeAttr('data-related-number')
     } else {
-        app.registerContact();
+        contactID = app.registerContact().id;
+    }
+
+    if ($('#callAgain').prop('checked')) {
+        new Scheduling(contactID, $('#nextTalkTopic').val(), $('#nextTalkDate').val(), $('#nextTalkTime').val()).save();
     }
 });
 

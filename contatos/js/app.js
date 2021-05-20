@@ -4,6 +4,12 @@ $(document).ready(() => {
     window.displayContacts = function() {
         if (localStorage.getItem('contacts')) {
             const contacts = JSON.parse(localStorage.getItem('contacts'));
+
+            if (!contacts.length) {
+                $('#noContactsInfo').removeClass('d-none');
+                return;
+            }
+
             const contactList = $('#contactList');
 
             const contactNames = contacts.map((contact) => contact.name).sort();
@@ -26,9 +32,12 @@ $(document).ready(() => {
                     </li>
                 `);
             });
+
+            return;
         } else {
             $('#noContactsInfo').removeClass('d-none');
         }
+        
     }
 
     displayContacts();

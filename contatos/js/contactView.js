@@ -122,7 +122,9 @@ class ContactView {
     showContactDeletionAlert() {
         this.buttons.undoContactDeletion.parent('.alert').removeClass('d-none').addClass('d-flex');
 
-        setTimeout(() => {
+        clearTimeout(window.undoContactDeletionTime);
+
+        window.undoContactDeletionTime = setTimeout(() => {
             this.buttons.undoContactDeletion.parent('.alert').addClass('d-none').removeClass('d-flex');
         }, 10000);
     }
