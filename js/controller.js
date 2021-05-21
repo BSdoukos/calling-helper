@@ -44,19 +44,22 @@ class PhoneListController {
                         const status = attachedContact ? `<a class="link-primary">${attachedContact.name}</a>` : number.status;
 
                         if (status !== number.status) {
-                            new ListHandler(userData.activeList.name, number.number, 'status', attachedContact.id);
+                            new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', attachedContact.id);
+                            this.view.appendNumber(number.number, status, false, attachedContact.id);
+                        } else {
+                            this.view.appendNumber(number.number, status, false);
                         }
 
-                        this.view.appendNumber(number.number, status, false);
                     } else {
                         const attachedContact = Contact.get(parseInt(number.status));
                         const status = attachedContact.number === number.number ? `<a class="link-primary">${attachedContact.name}</a>` : '-';
 
                         if (status === '-') {
-                            new ListHandler(userData.activeList.name, number.number, 'status', status);
+                            new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', status);
+                            this.view.appendNumber(number.number, status, false);
+                        } else {
+                            this.view.appendNumber(number.number, status, false, attachedContact.id);
                         }
-
-                        this.view.appendNumber(number.number, status, false);
                     }
                 });
 

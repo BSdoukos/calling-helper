@@ -10,8 +10,6 @@ class Contact {
     static createFrom(obj) {
         if (['name', 'number', 'lastCall', 'conversations'].every((prop) => obj[prop])) {
             return new Contact(...Object.values(obj));
-        } else {
-            console.error(new Error('Um objeto tentou ser convertido em contato, porém o mesmo não possui as propriedades necessárias.'));
         }
     }
 
@@ -245,6 +243,12 @@ class Scheduling {
         this.data = {contact, topic, date, time};
     }
 
+    static createFrom(schedulingData) {
+        if (['contact', 'topic', 'date', 'time'].every((prop) => schedulingData[prop])) {
+            return new Scheduling(Contact.get(schedulingData.contact), schedulingData.topic, schedulingData.date, schedulingData.time);
+        }
+    }
+
     save() {
         let schedule = localStorage.getItem('schedule');
 
@@ -257,5 +261,36 @@ class Scheduling {
         schedule.push(this.data);
 
         localStorage.setItem('schedule', JSON.stringify(schedule));
+    }
+
+    getDate() {
+        const date = {
+            year: this.data.date.substr(0, 4),
+            month: this.data.date.substr(5, 2),
+            day:  this.data.date.substr(8, 2)
+        }
+
+        const actualDate = new Date();
+
+        if (parseInt(date.year) === actualDate.getFullYear() && parseInt(date.month) === actualDate.getMonth() + 1) {
+            switch (parseInt(date.day)) {
+                case actualDate.getDate():
+                    date.interpretedDate = 'Hoje';
+                    break;
+                
+                case actualDate.getDate() + 1:
+                    date.interpretedDate = 'Amanhã';
+                    break;
+
+                case actualDate.getDate() - 1:
+                    date.interpretedDate = 'Ontem';
+                    break;
+                
+                default:
+                    date.interpretedDate = `${date.day}/${date.month}/${date.year}`;
+            }
+        }
+
+        return date;
     }
 }

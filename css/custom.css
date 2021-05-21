@@ -19,7 +19,7 @@ body {
 .hidden {
     display: none;
 }
-#workContainer {
+.info-container {
     max-width: 485px;
 }
 .status-line {
@@ -27,7 +27,6 @@ body {
 }
 .phone-table, #listContainer {
     margin: auto auto 0;
-    max-width: 485px;
     max-height: 47.35vh !important;
     scrollbar-width: thin;
 }

@@ -82,7 +82,7 @@ class PhoneListView {
         }
     }
 
-    appendNumber(number, status, setCurrent = true) {
+    appendNumber(number, status, setAsCurrent = true, relatedContact) {
         const table = $('.phone-table tbody');
         const newRow = $(`
             <tr class="number-row" data-bs-toggle="modal" data-bs-target="#numberInfoModal">
@@ -91,8 +91,12 @@ class PhoneListView {
             </tr>
         `).appendTo(table);
 
-        if (!table.find('tr.current').length && setCurrent) {
+        if (!table.find('tr.current').length && setAsCurrent) {
             newRow.addClass('current table-active');
+        }
+
+        if (relatedContact) {
+            newRow.attr('data-related-contact', relatedContact);
         }
 
         table.parent('table').addClass('table-hover');

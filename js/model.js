@@ -18,7 +18,13 @@ class PhoneListModel {
 
         const listNumbers = [];
         if ($('.phone-table .number-cell').get().length) {
-            Array.from($('.phone-table .number-cell')).forEach((cell, i) => listNumbers.push({number: $(cell).text(), status: $(cell).next('.status-cell').text(), lastCall: lastCalls[i]}));
+            Array.from($('.phone-table .number-cell')).forEach((cell, i) => {
+                listNumbers.push({
+                    number: $(cell).text(),
+                    status: $(cell).parent().data('related-contact') || $(cell).next('.status-cell').text(),
+                    lastCall: lastCalls[i]
+                });
+            });
         }
 
         const isCompleted = listNumbers.every((number) => number.status !== '-');
