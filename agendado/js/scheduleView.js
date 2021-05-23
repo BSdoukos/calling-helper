@@ -1,6 +1,7 @@
 class ScheduleView {
     constructor(container) {
         this.container = $(container);
+        this.collapsedAreas = [];
     }
 
     appendCollapsibleItem(itemData) {
@@ -9,7 +10,7 @@ class ScheduleView {
         const index = this.container.find('.accordion-item').length + 1;
 
         this.container.append(`
-            <div class="accordion-item mb-3">
+            <div class="accordion-item mb-3" data-scheduling-id="${scheduling.data.id}">
                 <h2 class="accordion-header" id="heading${index}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
                     <span class="me-2">${itemContact.name}</span> - <span class="mx-2">${scheduling.getDate().interpretedDate} - ${scheduling.data.time}</span>
@@ -33,7 +34,6 @@ class ScheduleView {
     }
 
     fillContainer(scheduledCalls) {
-        this.container.html('');
         this.container.removeClass('d-none');
 
         scheduledCalls.forEach((item) => {
@@ -67,31 +67,121 @@ class ScheduleView {
         new Scheduling(parseInt($('#scheduledTalkContactSelector').val()), $('#scheduledTalkTopic').val(), $('#scheduledTalkDate').val(), $('#scheduledTalkTime').val()).save();
     }
 
+    toggleButtons() {   
+        $('#createSchedulingBtn').toggleClass('d-none');
+        $('#editScheduleBtn').toggleClass('d-none');
+        $('.schedule-edition-btn').toggleClass('d-none');
+    }
+
+    enableEdition() {
+        this.container.find('.accordion-button').addClass('onedition').append('<input type="checkbox" name="scheduling" class="ms-auto scheduling-selection-checkbox">');
+        this.container.find('.accordion-collapse').removeClass('show');
+
+        const collapsedAreas = [];
+
+        this.container.find('.accordion-button').off().on('click', function(e) {
+            const checkbox = $(this).find('.scheduling-selection-checkbox');
+            
+            if(e.target !== checkbox.get(0)) {
+                checkbox.prop('checked', !checkbox.prop('checked'));
+            }
+
+            collapsedAreas.push($(this).parent().siblings('.accordion-collapse').remove()[0]);
+        });
+
+        return collapsedAreas;
+    }
+
+    disableEdition() {
+        this.container.find('.accordion-item').get().forEach((el, i) => {
+            if (this.collapsedAreas[i]) {
+                this.collapsedAreas[i].classList.remove('show');
+                el.append(this.collapsedAreas[i])
+            }
+        });
+
+        this.container.find('.accordion-button').removeClass('onedition').addClass('collapsed').off();
+        this.container.find('.scheduling-selection-checkbox').remove();
+    }
+
+    getSelection() {
+        return this.container.find('.scheduling-selection-checkbox:checked').get().map((checkbox) => parseInt($(checkbox).parents('.accordion-item').data('scheduling-id')));
+    }
+
+    showSchedulingDeletionAlert() {
+        $('.undo-scheduling-deletion-btn').parent('.alert').removeClass('d-none').addClass('d-flex');
+
+        clearTimeout(window.undoSchedulingDeletionTime);
+
+        window.undoSchedulingDeletionTime = setTimeout(() => {
+            $('.undo-scheduling-deletion-btn').parent('.alert').addClass('d-none').removeClass('d-flex');
+        }, 10000);
+    }
+
+    setEvents() {
+        $('#submitSchedulingBtn').off().on('click', function() {
+            this.createScheduling();
+            this.init();
+        }.bind(this));
+
+        $('#editScheduleBtn').off().on('click', function() {
+            this.collapsedAreas = this.enableEdition();
+            this.toggleButtons();
+            
+        }.bind(this));
+
+        $('#cancelScheduleEditionBtn').off().on('click', function() {
+            this.disableEdition();
+            this.toggleButtons();
+        }.bind(this));
+
+        $('#deleteSchedulingBtn').off().on('click', function() {
+            window.recentlyDeletedScheduling = this.getSelection().map((id) => Scheduling.get(id));
+            this.getSelection().forEach((id) => Scheduling.remove(id));
+            this.toggleButtons();
+            this.init();
+            this.disableEdition();
+            this.showSchedulingDeletionAlert();
+        }.bind(this));
+
+        $('.undo-scheduling-deletion-btn').off().on('click', function() {
+            window.recentlyDeletedScheduling.forEach((scheduling) => scheduling.save());
+            this.init();
+            $('.undo-scheduling-deletion-btn').parent('.alert').removeClass('d-flex').addClass('d-none');
+        }.bind(this));
+    }
+
     init() {
         let scheduledCalls = localStorage.getItem('schedule');
 
         $('.main-content').removeClass('d-none');
         $('#mainSpinner').remove();
+        this.container.html('');
+
+        const noScheduleInfo = $('#noScheduleInfo');
+        const editScheduleBtn = $('#editScheduleBtn');
 
         if (scheduledCalls) {   
             scheduledCalls = JSON.parse(scheduledCalls);
 
             if (scheduledCalls.length) {
                 this.fillContainer(scheduledCalls);
+                editScheduleBtn.removeClass('d-none');
+                noScheduleInfo.addClass('d-none');
+
             } else {
-                $('#noScheduleInfo').removeClass('d-none');
+                editScheduleBtn.addClass('d-none');
+                this.container.addClass('d-none');
+                noScheduleInfo.removeClass('d-none');
             }  
+
         } else {
-            $('#noScheduleInfo').removeClass('d-none');
+            editScheduleBtn.addClass('d-none');
+            this.container.addClass('d-none');
+            noScheduleInfo.removeClass('d-none');
         }
 
         this.displayContactOptions();
-
-        // Eventos
-
-        $('#submitSchedulingBtn').off().on('click', function() {
-            this.createScheduling();
-            this.init();
-        }.bind(this));
+        this.setEvents();
     }
 }

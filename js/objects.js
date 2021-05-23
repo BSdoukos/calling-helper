@@ -239,15 +239,31 @@ class ListHandler {
 }
 
 class Scheduling {
-    constructor(contact, topic, date, time) {
-        this.data = {contact, topic, date, time};
+    constructor(contact, topic, date, time, id = Date.now()) {
+        this.data = {contact, topic, date, time, id};
     }
 
     static createFrom(schedulingData) {
-        if (['contact', 'topic', 'date', 'time'].every((prop) => schedulingData[prop])) {
-            return new Scheduling(Contact.get(schedulingData.contact), schedulingData.topic, schedulingData.date, schedulingData.time);
+        if (['contact', 'topic', 'date', 'time', 'id'].every((prop) => schedulingData[prop])) {
+            return new Scheduling(schedulingData.contact, schedulingData.topic, schedulingData.date, schedulingData.time, schedulingData.id);
         }
     }
+
+    static get(id) {
+        const storedData = JSON.parse(localStorage.getItem('schedule')).filter((scheduling) => scheduling.id === id)[0];
+
+        return Scheduling.createFrom(storedData);
+    }
+
+    static remove(id) {
+        const schedule = JSON.parse(localStorage.getItem('schedule'));
+        const requestedScheduling = schedule.filter((scheduling) => scheduling.id === id)[0];
+
+        schedule.splice(schedule.indexOf(requestedScheduling), 1);
+
+        localStorage.setItem('schedule', JSON.stringify(schedule));
+    }
+
 
     save() {
         let schedule = localStorage.getItem('schedule');
