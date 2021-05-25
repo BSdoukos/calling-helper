@@ -71,6 +71,7 @@ class ScheduleView {
         $('#createSchedulingBtn').toggleClass('d-none');
         $('#editScheduleBtn').toggleClass('d-none');
         $('.schedule-edition-btn').toggleClass('d-none');
+        $('#deleteSchedulingBtn, #concludeScheduledCallBtn').prop('disabled', true);
     }
 
     enableEdition() {
@@ -135,7 +136,15 @@ class ScheduleView {
             this.toggleButtons();
         }.bind(this));
 
-        $('#deleteSchedulingBtn').off().on('click', function() {
+        $(document).on('click', '#scheduledCallsContainer .accordion-item', function(e) {
+            $('#deleteSchedulingBtn, #concludeScheduledCallBtn').prop('disabled', this.getSelection().length === 0);
+
+            if (this.getSelection().length > 1) {
+                $('#concludeScheduledCallBtn').prop('disabled', true);
+            }
+        }.bind(this));
+
+        $('#deleteSchedulingBtn').off().on('click', function() {  
             window.recentlyDeletedScheduling = this.getSelection().map((id) => Scheduling.get(id));
             this.getSelection().forEach((id) => Scheduling.remove(id));
             this.toggleButtons();
@@ -148,6 +157,25 @@ class ScheduleView {
             window.recentlyDeletedScheduling.forEach((scheduling) => scheduling.save());
             this.init();
             $('.undo-scheduling-deletion-btn').parent('.alert').removeClass('d-flex').addClass('d-none');
+        }.bind(this));
+
+        $('#noReadText').on('change', function() {
+            const textInput = $(this).closest('.modal').find('#scheduledTalkText');
+
+            textInput.prop('disabled', this.checked);
+
+            if (this.checked) {
+                textInput.val('Nenhum');
+            } else {
+                textInput.val('');
+            }
+        });
+
+        $('#submitScheduledCallConclusionBtn').off().on('click', function() {
+            const scheduling = Scheduling.get(this.getSelection()[0]);
+            scheduling.conclude($('#submitScheduledCallConclusionBtn').closest('.modal').find('#scheduledTalkText').val());
+            this.toggleButtons();
+            this.init();
         }.bind(this));
     }
 

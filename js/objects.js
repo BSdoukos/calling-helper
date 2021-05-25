@@ -178,7 +178,12 @@ class Report {
             report.videos += this.videos;
             report.returnVisits += this.returnVisits;
 
-            localStorage.setItem('report', JSON.stringify(report));
+            localStorage.setItem('report', JSON.stringify({
+                publications: report.publications,
+                videos: report.videos,
+                returnVisits: report.returnVisits,
+                time: report.time
+            }));
         }
     }
 }
@@ -308,5 +313,26 @@ class Scheduling {
         }
 
         return date;
+    }
+
+    conclude(text) {
+        const relatedContact = Contact.get(this.data.contact);
+
+        relatedContact.conversations.push({
+            topic: this.data.topic,
+            text
+        });
+
+        Contact.remove(this.data.contact);
+        relatedContact.save();
+
+        Scheduling.remove(this.id);
+
+        let reportIsNew = true;
+        if (localStorage.getItem('report')) {
+            reportIsNew = false;
+        }
+
+        new Report(reportIsNew, 0, 0, 1, {hours: 0, minutes: 0}).save();
     }
 }

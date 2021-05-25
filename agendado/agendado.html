@@ -60,8 +60,8 @@
         <div id="scheduledCallsContainer" class="accordion info-container mx-auto pt-3 pb-1 d-none"></div>
         <button class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#scheduleCallModal" id="createSchedulingBtn">Agendar nova</button>
         <button class="btn text-primary mx-1 d-none" id="editScheduleBtn">Editar</button>
-        <button class="btn btn-primary mx-1 d-none schedule-edition-btn" id="concludeScheduledCallBtn">Concluir</button>
-        <button class="btn btn-danger mx-1 d-none schedule-edition-btn" id="deleteSchedulingBtn">Excluir</button>
+        <button class="btn btn-primary mx-1 d-none schedule-edition-btn" id="concludeScheduledCallBtn" data-bs-toggle="modal" data-bs-target="#concludeSchedulingModal" disabled>Concluir</button>
+        <button class="btn btn-danger mx-1 d-none schedule-edition-btn" id="deleteSchedulingBtn" disabled>Excluir</button>
         <button class="btn text-primary d-none schedule-edition-btn" id="cancelScheduleEditionBtn">Cancelar</button>
       </div>
     </div>
@@ -78,27 +78,60 @@
             <form>
                 <div class="mb-3">
                     <label for="scheduledTalkTopic" class="form-label">Contato a ser revisitado</label>
-                    <select class="form-select next-talk-input me-3" id="scheduledTalkContactSelector" aria-label="Selecionar contato">
+                    <select class="form-select me-3" id="scheduledTalkContactSelector" aria-label="Selecionar contato">
                       <option value="none" selected>Selecionar</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="scheduledTalkTopic" class="form-label">Tema da conversa</label>
-                    <input type="text" class="form-control next-talk-input" id="scheduledTalkTopic">
+                    <input type="text" class="form-control" id="scheduledTalkTopic">
                 </div>
                 <div class="mb-3">
                     <label for="scheduledTalkDate" class="form-label">Data</label>
-                    <input type="date" class="form-control next-talk-input" id="scheduledTalkDate">
+                    <input type="date" class="form-control" id="scheduledTalkDate">
                 </div>
                 <div class="mb-3">
                     <label for="scheduledTalkTime" class="form-label">Horário</label>
-                    <input type="time" class="form-control next-talk-input" id="scheduledTalkTime">
+                    <input type="time" class="form-control" id="scheduledTalkTime">
                 </div>
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary" id="submitSchedulingBtn" data-bs-dismiss="modal">Registrar</button>
                 </div>
+              
+                <script>
+                  const date = new Date();
+                  setInterval(() => {
+                    document.querySelector('#scheduledTalkDate').min = date.toISOString().slice(0, -14)
+                    document.querySelector('#scheduledTalkTime').min = `${date.getHours()}:${date.toISOString().slice(14, -8)}`
+                  }, 5000);
+                </script>
             </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="concludeSchedulingModal" tabindex="-1" aria-labelledby="concludeSchedulingModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title h5" id="concludeSchedulingModalTitle">Marcar como concluída</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form>
+          <div class="modal-body">
+            <div class="mb-4">
+              <label for="scheduledTalkDate" class="form-label">Texto lido</label>
+              <input type="text" class="form-control" id="scheduledTalkText">
+            </div>
+  
+            <input type="checkbox" id="noReadText">
+            <label for="noReadText" class="form-label ms-1">Nenhum texto foi lido</label>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary d-block mx-auto" id="submitScheduledCallConclusionBtn" data-bs-dismiss="modal">Concluir</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
