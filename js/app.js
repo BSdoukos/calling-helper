@@ -119,9 +119,9 @@ $('#startTimingBtn').on('click', function() {
 $('#reportTimeBtn').on('click', function() {
     let report;
     if (!localStorage.getItem('report')) {
-        report = new Report(true, 0, 0, 0, timing);
+        report = new Report(true, 0, 0, 0, timing.time);
     } else {
-        report = new Report(false, 0, 0, 0, timing);
+        report = new Report(false, 0, 0, 0, timing.time);
     }
     
     report.save();

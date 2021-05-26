@@ -159,32 +159,44 @@ class Report {
         this.publications = publications;
         this.videos = videos;
         this.returnVisits = returnVisits;
+        this.month = Report.currentMonth;
     }
 
+    static currentMonth = `${new Array("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro")[new Date().getMonth()].toString().toLowerCase()}-${new Date().getFullYear()}`;
+
     save() {
+        let reports = localStorage.getItem('reports');
+
+        if (!reports) {
+            localStorage.setItem('reports', JSON.stringify([]));
+        }
+
+        reports = JSON.parse(localStorage.getItem('reports'));
+        const currentReport = reports.filter((report) => report.month === this.month)[0];
+
+        if (!currentReport) {
+            this.isNew = true;
+        }
+
         if (this.isNew) {
-            localStorage.setItem('report', JSON.stringify({
+            reports.push({
+                month: this.month,
                 time: this.time,
                 publications: this.publications,
                 videos: this.videos,
                 returnVisits: this.returnVisits
-            }));
+            });
         } else {
-            const report = JSON.parse(localStorage.getItem('report'));
-
-            report.time.hours += this.time.hours;
-            report.time.minutes += this.time.minutes;
-            report.publications += this.publications;
-            report.videos += this.videos;
-            report.returnVisits += this.returnVisits;
-
-            localStorage.setItem('report', JSON.stringify({
-                publications: report.publications,
-                videos: report.videos,
-                returnVisits: report.returnVisits,
-                time: report.time
-            }));
+            reports[reports.indexOf(currentReport)] = {
+                month: currentReport.month,
+                publications: currentReport.time.hours += this.time.hours,
+                videos: currentReport.time.minutes += this.time.minutes,
+                returnVisits: currentReport.videos,
+                time: currentReport.returnVisits
+            };
         }
+
+        localStorage.setItem('reports', JSON.stringify(reports));
     }
 }
 
