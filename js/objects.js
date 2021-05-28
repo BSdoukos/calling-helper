@@ -155,15 +155,26 @@ class Timing {
 class Report {
     constructor(isNew, publications, videos, returnVisits, time) {
         this.isNew = isNew;
-        this.time = time;
-        this.publications = publications;
-        this.videos = videos;
-        this.returnVisits = returnVisits;
+        this.time = {hours: parseInt(time.hours), minutes: parseInt(time.minutes)};
+        this.publications = parseInt(publications);
+        this.videos = parseInt(videos);
+        this.returnVisits = parseInt(returnVisits);
         this.month = Report.currentMonth;
     }
 
     static currentMonth = `${new Array("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro")[new Date().getMonth()].toString().toLowerCase()}-${new Date().getFullYear()}`;
 
+    static redefine() {
+        let reports = localStorage.getItem('reports');
+
+        if (reports) {
+            reports = JSON.parse(reports);
+            reports.pop();
+            localStorage.setItem('reports', JSON.stringify(reports));
+            new Report(true, 0, 0, 0, {hours: 0, minutes: 0}).save();
+        }
+    }
+    
     save() {
         let reports = localStorage.getItem('reports');
 
@@ -181,7 +192,8 @@ class Report {
         if (this.isNew) {
             reports.push({
                 month: this.month,
-                time: this.time,
+                hours: this.time.hours,
+                minutes: this.time.minutes,
                 publications: this.publications,
                 videos: this.videos,
                 returnVisits: this.returnVisits
@@ -189,10 +201,11 @@ class Report {
         } else {
             reports[reports.indexOf(currentReport)] = {
                 month: currentReport.month,
-                publications: currentReport.time.hours += this.time.hours,
-                videos: currentReport.time.minutes += this.time.minutes,
-                returnVisits: currentReport.videos,
-                time: currentReport.returnVisits
+                hours: currentReport.hours += this.time.hours,
+                minutes: currentReport.minutes += this.time.minutes,
+                publications: currentReport.publications += this.publications,
+                videos: currentReport.videos += this.videos,
+                returnVisits: currentReport.returnVisits += this.returnVisits
             };
         }
 
@@ -348,3 +361,17 @@ class Scheduling {
         new Report(reportIsNew, 0, 0, 1, {hours: 0, minutes: 0}).save();
     }
 }
+
+(function() {
+    let scheduled = localStorage.getItem('schedule');
+
+    if (scheduled) {
+        scheduled = JSON.parse(scheduled);
+
+        const scheduledForToday = scheduled.filter((sch) => sch.date === new Date().toISOString().slice(0, -14));
+
+        if (scheduledForToday.length) {
+            $('.scheduled-calls-badge').text(scheduledForToday.length);
+        }
+    }
+})();
