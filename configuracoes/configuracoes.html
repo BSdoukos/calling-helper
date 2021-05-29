@@ -57,9 +57,32 @@
     <main>
         <div class="container pt-5 px-2 text-center info-container">
             <h1 class="h4 mb-4 pb-2">Configurações</h1>
-            <h2 class="h6 fw-bold">Apagar dados do aplicativo</h2>
-            <p>Isto exclui todos os seus dados salvos, incluindo listas telefônicas, contatos, relatórios e agendamentos.</p>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataDeletionModal">Apagar dados</button>
+            <div class="mb-4 pb-2">
+                <h2 class="h6 fw-bold">Apagar dados do aplicativo</h2>
+                <p>Isto exclui todos os seus dados salvos, incluindo listas telefônicas, contatos, relatórios, agendamentos e configurações.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataDeletionModal">Apagar dados</button>
+            </div>
+            <div class="mb-4 pb-2">
+                <label>
+                    <h2 class="h6 fw-bold">Sincronizar listas telefônicas e contatos</h2>
+                    <p class="mb-2">Se desativado, suas listas não sofrerão mudanças quando você modificar um contato.</p>
+                    <input type="checkbox" class="setting-checkbox" name="listsContactsSync">
+                </label>
+            </div>
+            <div class="mb-4 pb-2">
+                <label>
+                    <h2 class="h6 fw-bold">Sincronizar contatos e ligações agendadas</h2>
+                    <p class="mb-2">Se desativado, os registros de conversas não serão adicionados aos contatos quando você marcar uma ligação agendada como concluída.</p>
+                    <input type="checkbox" class="setting-checkbox" name="contactsScheduledSync">
+                </label>
+            </div>
+            <div class="mb-4 pb-2">
+                <label>
+                    <h2 class="h6 fw-bold">Sincronizar ligações agendadas e relatórios</h2>
+                    <p class="mb-2">Se desativado, as revisitas que você fizer não serão automaticamente contabilizadas em seu relatório mensal.</p>
+                    <input type="checkbox" class="setting-checkbox" name="scheduledReportsSync">
+                </label>
+            </div>
         </div>
     </main>
 
@@ -85,6 +108,17 @@
     <script src="../js/objects.js"></script>
     <script>
         $('#deleteDataBtn').on('click', () => localStorage.clear());
+
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        $('.setting-checkbox').each((i, el) => {
+            $(el).prop('checked', settings[el.name]);
+        });
+
+        $('.setting-checkbox').on('change', function() {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            settings[this.name] = !settings[this.name];
+            localStorage.setItem('settings', JSON.stringify(settings));
+        });
     </script>
 </body>
 </html>

@@ -37,13 +37,14 @@ class PhoneListController {
             if (userData.activeList.numbers.length) {
                 this.view.adaptPhoneList();
 
+                const settings = JSON.parse(localStorage.getItem('settings'));
                 userData.activeList.numbers.forEach((number) => {
                     if (['Inexistente', 'Cx. postal', 'Falha', 'Ocupado', 'Desligado/sem serviço', '-'].some((status) => status === number.status)) {
                         const contacts =  JSON.parse(localStorage.getItem('contacts'));
                         const attachedContact = contacts.filter((contact) => contact.number === number.number)[0];
                         const status = attachedContact ? `<a class="link-primary">${attachedContact.name}</a>` : number.status;
 
-                        if (status !== number.status) {
+                        if (status !== number.status && settings.listsContactsSync) {
                             new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', attachedContact.id);
                             this.view.appendNumber(number.number, status, false, attachedContact.id);
                         } else {
@@ -54,7 +55,7 @@ class PhoneListController {
                         const attachedContact = Contact.get(parseInt(number.status));
                         const status = attachedContact.number === number.number ? `<a class="link-primary">${attachedContact.name}</a>` : '-';
 
-                        if (status === '-') {
+                        if (status === '-' && settings.listsContactsSync) {
                             new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', status);
                             this.view.appendNumber(number.number, status, false);
                         } else {

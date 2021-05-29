@@ -341,24 +341,26 @@ class Scheduling {
     }
 
     conclude(text) {
-        const relatedContact = Contact.get(this.data.contact);
+        const settings = JSON.parse(localStorage.getItem('settings'));
 
-        relatedContact.conversations.push({
-            topic: this.data.topic,
-            text
-        });
+        if (settings.contactsScheduledSync) {
+            const relatedContact = Contact.get(this.data.contact);
 
-        Contact.remove(this.data.contact);
-        relatedContact.save();
+            relatedContact.conversations.push({
+                topic: this.data.topic,
+                text
+            });
+    
+            Contact.remove(this.data.contact);
+            relatedContact.save();
+        }
 
         Scheduling.remove(this.id);
 
-        let reportIsNew = true;
-        if (localStorage.getItem('report')) {
-            reportIsNew = false;
+        if (settings.scheduledReportsSync) {
+            new Report(!!localStorage.getItem('report'), 0, 0, 1, {hours: 0, minutes: 0}).save();
         }
 
-        new Report(reportIsNew, 0, 0, 1, {hours: 0, minutes: 0}).save();
     }
 }
 
@@ -373,5 +375,14 @@ class Scheduling {
         if (scheduledForToday.length) {
             $('.scheduled-calls-badge').text(scheduledForToday.length);
         }
+    }
+
+
+    if (!localStorage.getItem('settings')) {
+        localStorage.setItem('settings', JSON.stringify({
+            listsContactsSync: true,
+            contactsScheduledSync: true,
+            scheduledReportsSync: true
+        }));
     }
 })();
