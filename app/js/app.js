@@ -66,7 +66,7 @@ $('#submitContactBtn').on('click', function(e) {
     }
 
     if ($('#callAgain').prop('checked')) {
-        new Scheduling(contactID, $('#nextTalkTopic').val(), $('#nextTalkDate').val(), $('#nextTalkTime').val()).save();
+        new Scheduling(Contact.get(contactID), $('#nextTalkTopic').val(), $('#nextTalkDate').val(), $('#nextTalkTime').val()).save();
     }
 });
 
@@ -170,7 +170,6 @@ $('#editInfoBtn, #saveChangesBtn').on('click', function() {
 $('#saveChangesBtn').on('click', function() {
     const listsData = new ListHandler();
     const newStatus = $('#statusInfoSelector').val();
-
     if (newStatus === '-') {   
         listsData.editPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text(), 'lastCall', '-');
 

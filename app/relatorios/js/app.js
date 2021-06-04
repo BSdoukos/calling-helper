@@ -26,9 +26,11 @@ $(document).ready(() => {
     displayReport(reportSelector.val());
     
     $('#editReportBtn').on('click', function() {
-        $($(this).data('bs-target')).find('input[data-report-info]').each((i, el) => {
+        const parentModal = $($(this).data('bs-target'));
+        parentModal.find('input[data-report-info]').each((i, el) => {
             el.value = $('#reportTable').find('[data-report-info]')[i].innerText;
         });
+        parentModal.find('[data-report-info="month"]').text($('#reportSelector').val().replace('-', '/').replace(/^\w/g, $('#reportSelector').val().charAt(0).toUpperCase()));
     });
     
     $('#saveReportChangesBtn').on('click', function(e) {

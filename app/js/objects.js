@@ -1,3 +1,60 @@
+class ListHandler {
+    constructor() {
+        this.lists = localStorage.getItem('phoneLists') ? JSON.parse(localStorage.getItem('phoneLists')) : undefined;
+    }
+
+    getPhoneNumber(list, number) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+
+        let requestedNumber;
+        list_.numbers.forEach((tel) => {
+            if (tel.number === number) {
+                requestedNumber = tel;
+            }
+        });
+
+        return requestedNumber;
+    }
+
+    editPhoneNumber(list, number, property, content) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+        const listIndex = phoneLists.indexOf(list_);
+        
+        list_.numbers.forEach((tel) => {
+            if (tel.number === number) {
+                tel[property] = content;
+            }
+        });
+        phoneLists[listIndex] = list_;
+
+        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
+    }
+
+    deletePhoneNumber(list, number) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+        const listIndex = phoneLists.indexOf(list_);
+
+        list_.numbers = list_.numbers.filter((tel) => tel.number !== number);
+        phoneLists[listIndex] = list_;
+
+        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
+    }
+
+    editList(list, property, content) {
+        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
+        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
+        const listIndex = phoneLists.indexOf(list_);
+
+        list_[property] = content;
+        phoneLists[listIndex] = list_;
+
+        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
+    }
+}
+
 class Contact {
     constructor(name, number, lastCall, conversations, id = Date.now()) {
         this.name = name;
@@ -16,7 +73,7 @@ class Contact {
     static get(id) {
         const storedData = JSON.parse(localStorage.getItem('contacts')).filter((contact) => contact.id === id)[0];
 
-        return new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.conversations, storedData.id);
+        return !storedData ? storedData : new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.conversations, storedData.id);
     }
 
     static remove(id) {
@@ -44,6 +101,21 @@ class Contact {
         return this;
     }
 
+    updateLists() {
+        const listing = new ListHandler();
+        
+        listing.lists.forEach((list) => {
+            const currentRelatedTel = list.numbers.filter((tel) => tel.status === this.id)[0];
+            const correctRelatedTel = list.numbers.filter((tel) => tel.number === this.number)[0];
+            if (currentRelatedTel) {
+                listing.editPhoneNumber(list.name, currentRelatedTel.number, 'status', '-');
+            }
+            if (correctRelatedTel) {
+                listing.editPhoneNumber(list.name, correctRelatedTel.number, 'status', this.id);
+            }
+        });
+    }
+
     save() {
         if (!localStorage.getItem('contacts')) {
             localStorage.setItem('contacts', JSON.stringify([]));
@@ -55,6 +127,8 @@ class Contact {
         contacts.push(newContact);
         
         localStorage.setItem('contacts', JSON.stringify(contacts));
+
+        this.updateLists();
     }
 
     displayData(mainElementSelector, onlyConversations = false, conversationIndex = this.conversations.length - 1) {
@@ -210,61 +284,6 @@ class Report {
         }
 
         localStorage.setItem('reports', JSON.stringify(reports));
-    }
-}
-
-class ListHandler {
-    constructor() {}
-
-    getPhoneNumber(list, number) {
-        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
-        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
-
-        let requestedNumber;
-        list_.numbers.forEach((tel) => {
-            if (tel.number === number) {
-                requestedNumber = tel;
-            }
-        });
-
-        return requestedNumber;
-    }
-
-    editPhoneNumber(list, number, property, content) {
-        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
-        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
-        const listIndex = phoneLists.indexOf(list_);
-        
-        list_.numbers.forEach((tel) => {
-            if (tel.number === number) {
-                tel[property] = content;
-            }
-        });
-        phoneLists[listIndex] = list_;
-
-        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
-    }
-
-    deletePhoneNumber(list, number) {
-        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
-        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
-        const listIndex = phoneLists.indexOf(list_);
-
-        list_.numbers = list_.numbers.filter((tel) => tel.number !== number);
-        phoneLists[listIndex] = list_;
-
-        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
-    }
-
-    editList(list, property, content) {
-        const phoneLists = JSON.parse(localStorage.getItem('phoneLists'));
-        const list_ = phoneLists.filter((phoneList) => phoneList.name === list)[0];
-        const listIndex = phoneLists.indexOf(list_);
-
-        list_[property] = content;
-        phoneLists[listIndex] = list_;
-
-        localStorage.setItem('phoneLists', JSON.stringify(phoneLists));
     }
 }
 

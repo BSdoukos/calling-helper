@@ -7,6 +7,7 @@ $(document).ready(() => {
 
             if (!contacts.length) {
                 $('#noContactsInfo').removeClass('d-none');
+                $('#contactContainer').addClass('d-none');
                 return;
             }
 
@@ -17,6 +18,7 @@ $(document).ready(() => {
             contactNames.forEach((name) => contacts.filter((contact) => contact.name === name).forEach((filteredContact) => sortedContacts.push(filteredContact)));
     
             $('#contactContainer').removeClass('d-none');
+            $('#noContactsInfo').addClass('d-none');
             contactList.html('');
 
             sortedContacts.forEach((contact) => {

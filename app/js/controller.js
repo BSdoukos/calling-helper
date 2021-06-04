@@ -37,30 +37,17 @@ class PhoneListController {
             if (userData.activeList.numbers.length) {
                 this.view.adaptPhoneList();
 
-                const settings = JSON.parse(localStorage.getItem('settings'));
                 userData.activeList.numbers.forEach((number) => {
                     if (['Inexistente', 'Cx. postal', 'Falha', 'Ocupado', 'Desligado/sem serviço', '-'].some((status) => status === number.status)) {
-                        const contacts =  JSON.parse(localStorage.getItem('contacts'));
-                        const attachedContact = contacts.filter((contact) => contact.number === number.number)[0];
-                        const status = attachedContact ? `<a class="link-primary">${attachedContact.name}</a>` : number.status;
-
-                        if (status !== number.status && settings.listsContactsSync) {
-                            new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', attachedContact.id);
-                            this.view.appendNumber(number.number, status, false, attachedContact.id);
-                        } else {
-                            this.view.appendNumber(number.number, status, false);
-                        }
-
+                        this.view.appendNumber(number.number, number.status, false);
                     } else {
                         const attachedContact = Contact.get(parseInt(number.status));
-                        const status = attachedContact.number === number.number ? `<a class="link-primary">${attachedContact.name}</a>` : '-';
-
-                        if (status === '-' && settings.listsContactsSync) {
-                            new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', status);
-                            this.view.appendNumber(number.number, status, false);
-                        } else {
-                            this.view.appendNumber(number.number, status, false, attachedContact.id);
+                        if (!attachedContact) {
+                            new ListHandler().editPhoneNumber(userData.activeList.name, number.number, 'status', '-');
+                            this.view.appendNumber(number.number, '-', false);
+                            return;
                         }
+                        this.view.appendNumber(number.number, `<span class="text-primary text-decoration-underline">${attachedContact.name}</span>`, false, attachedContact.id);
                     }
                 });
 
@@ -154,14 +141,16 @@ class PhoneListController {
         this.displayUserData();
     }
 
-    registerContact(number) {
+    registerContact(number = $('#currentNumber').text()) {
         this.setNumberCallTime();
 
-        const contact = this.model.createContact();
+        let contact;
 
-        if (number) {
+        if (number !== $('#currentNumber').text()) {
+            contact = this.model.createContact(number);
             this.view.displayNewNumberStatus(`<a class="link-primary">${contact.id}</a>`, number);
         } else {
+            contact = this.model.createContact();
             this.view.displayNewNumberStatus(`<a class="link-primary">${contact.id}</a>`);
             this.view.changeCurrentItem();
         }

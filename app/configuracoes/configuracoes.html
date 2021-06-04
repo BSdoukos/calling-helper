@@ -42,13 +42,22 @@
                 <li class="nav-item py-2 mx-lg-4">
                     <a class="nav-link">Ajuda</a>
                 </li>
+                <li class="nav-item py-3 d-lg-none">
+                    <a class="scheduled-calls-link text-center text-secondary" href="../agendado/agendado.html">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                        <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                      </svg>
+                      <span class="scheduled-calls-badge badge rounded-pill bg-primary position-absolute"></span>
+                    </a>
+                </li>
                 </ul>
-                <a class="scheduled-calls-link d-none d-md-flex align-items-center position-absolute text-secondary" href="../agendado/agendado.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
-                    <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                </svg>
-                <span class="scheduled-calls-badge badge rounded-pill bg-primary position-absolute"></span>
+                <a class="scheduled-calls-link align-items-center position-absolute text-secondary d-none d-lg-flex" href="../agendado/agendado.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                      <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                    </svg>
+                    <span class="scheduled-calls-badge badge rounded-pill bg-primary position-absolute"></span>
                 </a>
             </div>
         </nav>
@@ -57,11 +66,6 @@
     <main>
         <div class="container pt-5 px-2 text-center info-container">
             <h1 class="h4 mb-4 pb-2">Configurações</h1>
-            <div class="mb-4 pb-2">
-                <h2 class="h6 fw-bold">Apagar dados do aplicativo</h2>
-                <p>Isto exclui todos os seus dados salvos, incluindo listas telefônicas, contatos, relatórios, agendamentos e configurações.</p>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataDeletionModal">Apagar dados</button>
-            </div>
             <div class="mb-4 pb-2">
                 <label>
                     <h2 class="h6 fw-bold">Sincronizar listas telefônicas e contatos</h2>
@@ -82,6 +86,11 @@
                     <p class="mb-2">Se desativado, as revisitas que você fizer não serão automaticamente contabilizadas em seu relatório mensal.</p>
                     <input type="checkbox" class="setting-checkbox" name="scheduledReportsSync">
                 </label>
+            </div>
+            <div class="mb-4 pb-2">
+                <h2 class="h6 fw-bold">Apagar dados do aplicativo</h2>
+                <p>Isto exclui todos os seus dados salvos, incluindo listas telefônicas, contatos, relatórios, agendamentos e configurações.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataDeletionModal">Apagar dados</button>
             </div>
         </div>
     </main>
