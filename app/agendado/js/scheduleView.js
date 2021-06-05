@@ -35,6 +35,11 @@ class ScheduleView {
     fillContainer(scheduledCalls) {
         this.container.removeClass('d-none');
 
+        scheduledCalls.sort((a, b) => {
+            const splittedDates = [a, b].map((sch) => sch.date.split('-'));
+            return new Date(splittedDates[0][2], splittedDates[0][1] - 1, splittedDates[0][0]) >= new Date(splittedDates[1][2], splittedDates[1][1] - 1, splittedDates[1][0]);
+        });
+
         scheduledCalls.forEach((item) => {
             this.appendCollapsibleItem(item);
         });
