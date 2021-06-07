@@ -174,4 +174,67 @@ class PhoneListController {
 
         this.displayUserData();
     }
+
+    initCronometer(thereIsSavedTiming = false) {
+        if (thereIsSavedTiming) {
+            window.timing = Timing.getSaved();
+        } else {
+            window.timing = new Timing();
+            timing.start();
+        }
+    
+        window.updateCronometer = function() {
+            timing.update();
+
+            if (!$('#timingText').length) {
+                $('#startTimingBtn').parent().append(`
+                    <button class="btn text-secondary me-3 cronometer-btns" id="toggleTimingBtn">Pausar</button>
+                    <p id="timingText" class="mb-0"></p>
+                    <button class="btn text-danger ms-3 cronometer-btns" id="stopTimingBtn" data-bs-toggle="modal" data-bs-target="#timeReportingModal">Parar</button>
+                `);
+            }
+    
+            $('#timingText').text(timing.format());
+    
+            $('#startTimingBtn').css('display', 'none');  
+        }
+
+        updateCronometer();
+        
+        $('#toggleTimingBtn').on('click', function() {
+            if (this.innerText === 'Pausar') {
+                timing.pause();
+                clearInterval(timingCounter);
+                this.innerText = 'Continuar';
+            } else {
+                timing.resume();
+                updateCronometer();
+                window.timingCounter = setInterval(updateCronometer, 1000);
+                this.innerText = 'Pausar';
+            }
+        });
+        
+        $(window).on('unload', () => {
+            if (timing) {
+                timing.save();
+            }
+        });
+        
+        $('#stopTimingBtn').on('click', function() {
+            clearInterval(timingCounter);
+            timing.update();
+            $('#workedTime').text(`${timing.time.hours} horas e ${timing.time.minutes} minutos`);
+            $('.cronometer-btns, #timingText').remove();
+            $('#startTimingBtn').css('display', 'initial');
+            
+            Timing.clearSaved();
+        });
+
+        window.timingCounter = setInterval(updateCronometer, 1000);
+
+        if (timing.isPaused) {
+            clearInterval(timingCounter);
+            $('#toggleTimingBtn').text('Continuar');
+        }
+    }
 }

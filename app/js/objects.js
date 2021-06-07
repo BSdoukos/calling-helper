@@ -184,12 +184,31 @@ class Timing {
     constructor() {
         this.begin;
         this.pauses = [];
+        this.isPaused = false;
         this.time = {hours: 0, minutes: 0, seconds: 0};
     }
 
     static HOUR = 3600000;
     static MINUTE = 60000;
     static SECOND = 1000;
+
+    static clearSaved() {
+        timing = null;
+        sessionStorage.removeItem('timing');
+    }
+
+    static getSaved() {
+        const savedTiming = sessionStorage.getItem('timing') ? JSON.parse(sessionStorage.getItem('timing')) : null;
+        if (savedTiming) {
+            const timingObj = new Timing();
+
+            for (const key in savedTiming) {
+                timingObj[key] = savedTiming[key];
+            }
+    
+            return timingObj;
+        }
+    }
 
     start() {
         this.begin = Date.now();
@@ -198,6 +217,10 @@ class Timing {
     update() {
         let pauses = 0;
         this.pauses.forEach((pause) => pauses += pause.duration);
+
+        if (isNaN(pauses)) {
+            return;
+        }
 
         const elapsedTime = Date.now() - this.begin - pauses;
 
@@ -215,14 +238,20 @@ class Timing {
     }
 
     pause() {
+        this.isPaused = true;
         this.pauses.push({begin: Date.now()});
     }
 
     resume() {
+        this.isPaused = false;
         const lastPause = this.pauses[this.pauses.length - 1];
 
         lastPause.end = Date.now();
         lastPause.duration = lastPause.end - lastPause.begin;
+    }
+
+    save() {
+        sessionStorage.setItem('timing', JSON.stringify(this));
     }
 }
 

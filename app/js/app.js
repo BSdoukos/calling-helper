@@ -2,6 +2,10 @@ const app = new PhoneListController(new PhoneListModel(), new PhoneListView());
 
 app.displayUserData();
 
+if (Timing.getSaved()) {
+    app.initCronometer(true);
+}
+
 $('#listName').on('input', function() {
     app.view.validateInput('simple', '#newListModal form');
 });
@@ -71,49 +75,7 @@ $('#submitContactBtn').on('click', function(e) {
 });
 
 $('#startTimingBtn').on('click', function() {
-    window.timing = new Timing();
-    timing.start();
-
-    window.updateCronometer = function() {
-        timing.update();
-
-        if (!$('#timingText').length) {
-            $(this).parent().append(`
-                <button class="btn text-secondary me-3 cronometer-btns" id="toggleTimingBtn">Pausar</button>
-                <p id="timingText" class="mb-0"></p>
-                <button class="btn text-danger ms-3 cronometer-btns" id="stopTimingBtn" data-bs-toggle="modal" data-bs-target="#timeReportingModal">Parar</button>
-            `);
-        }
-
-        $('#timingText').text(timing.format());
-
-        $(this).css('display', 'none');  
-    }.bind(this);
-
-    updateCronometer();
-
-    $('#toggleTimingBtn').on('click', function() {
-        if (this.innerText === 'Pausar') {
-            timing.pause();
-            clearInterval(timingCounter);
-            this.innerText = 'Continuar';
-        } else {
-            timing.resume();
-            updateCronometer();
-            window.timingCounter = setInterval(updateCronometer, 1000);
-            this.innerText = 'Pausar';
-        }
-    });
-
-    $('#stopTimingBtn').on('click', function() {
-        clearInterval(timingCounter);
-        timing.update();
-        $('#workedTime').text(`${timing.time.hours} horas e ${timing.time.minutes} minutos`);
-        $('.cronometer-btns, #timingText').remove();
-        $('#startTimingBtn').css('display', 'initial');
-    });
-
-    window.timingCounter = setInterval(updateCronometer, 1000)
+    app.initCronometer();
 });
 
 $('#reportTimeBtn').on('click', function() {
@@ -186,3 +148,7 @@ $('#saveChangesBtn').on('click', function() {
 });
 
 $('#deleteNumberBtn').on('click', app.deleteNumber.bind(app));
+
+(function() {
+
+});
