@@ -88,14 +88,8 @@ $('#startTimingBtn').on('click', function() {
 });
 
 $('#reportTimeBtn').on('click', function() {
-    let report;
-    if (!localStorage.getItem('report')) {
-        report = new Report(true, 0, 0, 0, timing.time);
-    } else {
-        report = new Report(false, 0, 0, 0, timing.time);
-    }
-    
-    report.save();
+    new Report(false, 0, 0, 0, timing.time).save();
+    Timing.clearSaved();
 });
 
 $(document).on('click', '.number-row', function(e) {
@@ -129,11 +123,13 @@ $(document).on('click', '.number-row', function(e) {
 
 $('#editInfoBtn, #saveChangesBtn').on('click', function() {
     const editBtn = $('#editInfoBtn');
-    if (editBtn.innerText === 'Editar') {
-        editBtn.innerText = 'Cancelar';
+
+    if (editBtn.text() === 'Editar') {
+        editBtn.text('Cancelar');
     } else {
-        editBtn.innerText ='Editar';
+        editBtn.text('Editar');
     }
+
     $('#saveChangesBtn, #statusInfoSelector, #numberInfoStatus').toggleClass('d-none');
 });
 
