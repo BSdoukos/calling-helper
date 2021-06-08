@@ -1,9 +1,18 @@
 const app = new PhoneListController(new PhoneListModel(), new PhoneListView());
 
+$(document).ready(() => {
+
 app.displayUserData();
 
 if (Timing.getSaved()) {
     app.initCronometer(true);
+}
+
+const params = new URLSearchParams(location.search);
+
+if (params.has('window')) {
+    $(`#${params.get('window')}`).modal('show');
+    history.replaceState({}, document.title, "index.html");
 }
 
 $('#listName').on('input', function() {
@@ -148,7 +157,4 @@ $('#saveChangesBtn').on('click', function() {
 });
 
 $('#deleteNumberBtn').on('click', app.deleteNumber.bind(app));
-
-(function() {
-
 });
