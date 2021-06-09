@@ -2,18 +2,49 @@ const app = new PhoneListController(new PhoneListModel(), new PhoneListView());
 
 $(document).ready(() => {
 
+// Verifica a disponibilidade do Web Storage
+    function storageAvailable(type) {
+        try {
+            var storage = window[type],
+                x = '__storage_test__';
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        }
+        catch(e) {
+            return e instanceof DOMException && (
+                // everything except Firefox
+                e.code === 22 ||
+                // Firefox
+                e.code === 1014 ||
+                // test name field too, because code might not be present
+                // everything except Firefox
+                e.name === 'QuotaExceededError' ||
+                // Firefox
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                // acknowledge QuotaExceededError only if there's something already stored
+                storage.length !== 0;
+        }
+    }
+
+    if (!storageAvailable('localStorage') || !storageAvailable('sessionStorage')) {
+        $('#noStorageModal').modal('show');
+    }
+
 app.displayUserData();
 
-if (Timing.getSaved()) {
-    app.initCronometer(true);
-}
+// Verifica se o cronômetro está ativo
+    if (Timing.getSaved()) {
+        app.initCronometer(true);
+    }
 
-const params = new URLSearchParams(location.search);
+// Verifica se o modal "Contatar desenvolvedor" deve ser aberto
+    const params = new URLSearchParams(location.search);
 
-if (params.has('window')) {
-    $(`#${params.get('window')}`).modal('show');
-    history.replaceState({}, document.title, "index.html");
-}
+    if (params.has('window')) {
+        $(`#${params.get('window')}`).modal('show');
+        history.replaceState({}, document.title, "index.html");
+    }
 
 $('#listName').on('input', function() {
     app.view.validateInput('simple', '#newListModal form');

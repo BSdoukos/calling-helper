@@ -43,10 +43,8 @@ $(document).ready(() => {
     }
 
     displayContacts();
-});
 
-// Visualização de contatos
-(function() {
+    // Visualização de contatos
     $(document).on('click', '.contact-viewing-btn', function(e) {
         // Sinaliza o cartão de contato selecionado como ativo
         $('.card-list__item.active').removeClass('active');
@@ -54,7 +52,7 @@ $(document).ready(() => {
 
         // Coleta o ID do contato solicitado e o busca no localStorage
         const contact = Contact.get(parseInt($(e.target).parents('[data-contact-id]').attr('data-contact-id')));
-   
+    
         const modal = new ContactView(contact, $('#contactModal'));
         modal.open();
     });
@@ -66,4 +64,12 @@ $(document).ready(() => {
         displayContacts();
         $(this).parent('.alert').removeClass('d-flex').addClass('d-none');
     });
-})();
+
+    // Direcionamento para contato especificado na URL (se houver)
+    const params = new URLSearchParams(location.search);
+
+    if (params.has('id')) {
+        $(`.card-list__item[data-contact-id="${params.get('id')}"] .contact-viewing-btn`).get(0).click();
+        history.replaceState({}, document.title, "contatos.html");
+    }
+});

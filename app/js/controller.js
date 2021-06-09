@@ -47,7 +47,7 @@ class PhoneListController {
                             this.view.appendNumber(number.number, '-', false);
                             return;
                         }
-                        this.view.appendNumber(number.number, `<span class="text-primary text-decoration-underline">${attachedContact.name}</span>`, false, attachedContact.id);
+                        this.view.appendNumber(number.number, `<a href="app/contatos/contatos.html?id=${attachedContact.id}" class="link-primary">${attachedContact.name}</a>`, false, attachedContact.id);
                     }
                 });
 
