@@ -5,7 +5,6 @@ $(document).ready(() => {
 // Verifica a disponibilidade do Web Storage
     function storageAvailable(type) {
         try {
-            debugger
             var storage = window[type],
                 x = '__storage_test__';
             storage.setItem(x, x);

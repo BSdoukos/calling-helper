@@ -105,7 +105,7 @@ class PhoneListView {
     updateWorkContainer() {
         $('#workContainer').removeClass('hidden');
         $('#currentNumber').text($('.phone-table tr.current .number-cell').text());
-        $('#callBtn').attr('href', `tel:55${$('.phone-table tr.current .number-cell').text().replace(/[\(\)\s\-]/g, '')}`);
+        $('#callBtn').attr('href', `tel:${$('.phone-table tr.current .number-cell').text().replace(/\(\d{2}\)\s/g, '').replace('-', '')}`);
     }
 
     displayNewNumberStatus(status, number = $('#currentNumber').text()) {

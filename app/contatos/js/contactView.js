@@ -34,7 +34,9 @@ class ContactView {
     enableEdition() {
         this.editableElements.forEach((el) => {
             const inputType = el.attr('data-contact-info') === 'number' ? 'tel' : 'text';      
-            el.replaceWith(`<input type="${inputType}" value="${el.text()}" class="form-control mt-2 mb-3" data-contact-info="${el.data('contact-info')}"></input>`);
+            const input = $(`<input type="${inputType}" value="${el.text()}" class="form-control mt-2 mb-3" data-contact-info="${el.data('contact-info')}"></input>`);
+            el.replaceWith(input);
+            input.mask('(00) 00000-0000');
         });
     }
 
