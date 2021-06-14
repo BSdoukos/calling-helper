@@ -36,7 +36,10 @@ class ContactView {
             const inputType = el.attr('data-contact-info') === 'number' ? 'tel' : 'text';      
             const input = $(`<input type="${inputType}" value="${el.text()}" class="form-control mt-2 mb-3" data-contact-info="${el.data('contact-info')}"></input>`);
             el.replaceWith(input);
-            input.mask('(00) 00000-0000');
+            
+            if (inputType === 'tel') {
+                input.mask('(00) 00000-0000');
+            }
         });
     }
 
