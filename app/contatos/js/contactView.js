@@ -161,6 +161,7 @@ class ContactView {
         this.buttons.cancel.off().on('click', function() {
             this.disableEdition();
             this.toggleButtons();
+            delete this.editedContact;
         }.bind(this));
 
         this.container.off().on('input', 'input[data-contact-info]', this.verifyInputFilling.bind(this))
@@ -209,6 +210,18 @@ class ContactView {
         this.buttons.deleteConversation.off().on('click', function() {
             this.deleteConversation();
             Contact.createFrom(this.editedContact).displayData(`#${this.container.get(0).id}`, true);
+        }.bind(this));
+
+        $(document).off('input', '#contactModal [data-contact-info="conversations"] input[data-contact-info]').on('input', '#contactModal [data-contact-info="conversations"] input[data-contact-info]', function(e) {
+            this.prepareEdition();
+
+            const conversationName = $('#contactModal .conversation-selector').val();
+            const conversationIndex = conversationName !== '1ª conversa' ? parseInt(conversationName.replace('ª revisita', '')) : 0;
+
+            let conversation = this.editedContact.conversations[conversationIndex];       
+            if (conversation) {
+                conversation[$(e.target).data('contact-info')] = e.target.value;
+            }
         }.bind(this));
     }
 }
