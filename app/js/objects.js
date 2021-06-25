@@ -66,8 +66,9 @@ class Contact {
     }
 
     static createFrom(obj) {
-        if (['name', 'number', 'lastCall', 'remarks', 'conversations'].every((prop) => obj[prop])) {
-            return new Contact(...Object.values(obj));
+        if (['name', 'number', 'lastCall', 'conversations'].every((prop) => obj[prop])) {
+            obj.remarks = obj.remarks || 'Nenhum(a)';
+            return new Contact(obj.name, obj.number, obj.lastCall, obj.remarks, obj.conversations);
         }
     }
 
@@ -154,7 +155,6 @@ class Contact {
                     const conversationsElements = $(el).find('[data-contact-info]');
 
                     conversationsElements.each(function(_i, element) {
-                        debugger
                         const content = this.conversations[conversationIndex][$(element).attr('data-contact-info')];
                         if (content) {
                             if (element.tagName !== 'INPUT') {

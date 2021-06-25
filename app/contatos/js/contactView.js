@@ -2,7 +2,7 @@ class ContactView {
     constructor(contact, container) {
         this.contact = contact;
         this.container = container;
-        this.editableElements = ['name', 'number', 'topic', 'text'].map((info) => $(`[data-contact-info="${info}"]`));
+        this.editableElements = ['name', 'number', 'remarks', 'topic', 'text'].map((info) => $(`[data-contact-info="${info}"]`));
         this.buttons = {
             edit: this.container.find('.edit-contact-btn'),
             cancel: this.container.find('.cancel-contact-changes-btn'),
