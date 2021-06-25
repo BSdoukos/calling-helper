@@ -56,16 +56,17 @@ class ListHandler {
 }
 
 class Contact {
-    constructor(name, number, lastCall, conversations, id = Date.now()) {
+    constructor(name, number, lastCall, remarks, conversations, id = Date.now()) {
         this.name = name;
         this.number = number;
         this.lastCall = lastCall;
+        this.remarks = remarks;
         this.conversations = conversations;
         this.id = id;
     }
 
     static createFrom(obj) {
-        if (['name', 'number', 'lastCall', 'conversations'].every((prop) => obj[prop])) {
+        if (['name', 'number', 'lastCall', 'remarks', 'conversations'].every((prop) => obj[prop])) {
             return new Contact(...Object.values(obj));
         }
     }
@@ -73,7 +74,7 @@ class Contact {
     static get(id) {
         const storedData = JSON.parse(localStorage.getItem('contacts')).filter((contact) => contact.id === id)[0];
 
-        return !storedData ? storedData : new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.conversations, storedData.id);
+        return !storedData ? storedData : new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.remarks, storedData.conversations, storedData.id);
     }
 
     static remove(id) {
@@ -121,8 +122,14 @@ class Contact {
             localStorage.setItem('contacts', JSON.stringify([]));
         }
 
+        this.conversations.forEach((conv) => {
+            for (const key in conv) {
+                conv[key] = conv[key] || 'Nenhum(a)';
+            }
+        });
+
         const contacts = JSON.parse(localStorage.getItem('contacts'));
-        const newContact = {name: this.name, number: this.number, lastCall: this.lastCall, conversations: this.conversations, id: this.id};
+        const newContact = {name: this.name || 'Sem nome', number: this.number, lastCall: this.lastCall, remarks: this.remarks || 'Nenhum(a)', conversations: this.conversations, id: this.id};
 
         contacts.push(newContact);
         
@@ -138,7 +145,8 @@ class Contact {
             if (this[dataContactInfo]) {
                 if (dataContactInfo !== 'conversations' && !onlyConversations) {
                     if (el.tagName !== 'INPUT') {
-                        el.innerText = this[dataContactInfo];
+                        const content = dataContactInfo === 'number' ? `<a href="tel:${this[dataContactInfo].replace(/\(\d{2}\)\s/g, '').replace('-', '')}">${this[dataContactInfo]}</a>` : this[dataContactInfo];
+                        el.innerHTML = content;
                     } else {
                         el.value = this[dataContactInfo];
                     }
@@ -146,6 +154,7 @@ class Contact {
                     const conversationsElements = $(el).find('[data-contact-info]');
 
                     conversationsElements.each(function(_i, element) {
+                        debugger
                         const content = this.conversations[conversationIndex][$(element).attr('data-contact-info')];
                         if (content) {
                             if (element.tagName !== 'INPUT') {

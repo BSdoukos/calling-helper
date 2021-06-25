@@ -19,13 +19,12 @@ class ScheduleView {
                     <div class="accordion-body text-start">
                         <div class="mb-3">
                             <h3 class="h6 fw-bold mb-1">Telefone</h3>
-                            <p>${scheduling.data.contact.number}</p>
+                            <a href="tel:${scheduling.data.contact.number.replace(/\(\d{2}\)\s/g, '').replace('-', '')}">${scheduling.data.contact.number}</a>
                         </div>
                         <div class="mb-2">
                             <h3 class="h6 fw-bold mb-1">Tema da conversa</h3>
                             <p class="mb-0">${scheduling.data.topic}</p>
                         </div>
-                        <a href="tel:55${scheduling.data.contact.number.replace(/[\(\) -]/g, '')}" class="btn btn-primary pt-1 d-md-none">Ligar</a>
                     </div>
                 </div>
             </div>

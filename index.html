@@ -183,27 +183,33 @@
                   </div>
                   <div class="mb-3">
                     <label for="firstTalkTopic" class="form-label">Tema da conversa</label>
-                    <input type="text" class="form-control" id="firstTalkTopic" required>
+                    <input type="text" class="form-control" id="firstTalkTopic">
                   </div>
                   <div class="mb-3">
                     <label for="firstTalkText" class="form-label">Texto lido</label>
                     <input type="text" class="form-control" id="firstTalkText">
                   </div>
                   <div class="mb-3">
+                    <label for="contactRemarks" class="form-label">Observações</label>
+                    <textarea class="form-control" id="contactRemarks"></textarea>
+                  </div>
+                  <div class="mb-3">
                     <input type="checkbox" class="me-1" id="callAgain">
                     <label for="callAgain" class="form-label">Ligar novamente</label>
                   </div>
-                  <div class="mb-3">
-                    <label for="nextTalkTopic" class="form-label">Tema da próxima conversa</label>
-                    <input type="text" class="form-control next-talk-input" id="nextTalkTopic" aria-disabled="true" disabled>
-                  </div>
-                  <div class="mb-3">
-                    <label for="nextTalkDate" class="form-label">Data</label>
-                    <input type="date" class="form-control next-talk-input" id="nextTalkDate" aria-disabled="true" disabled>
-                  </div>
-                  <div class="mb-3">
-                    <label for="nextTalkTime" class="form-label">Horário</label>
-                    <input type="time" class="form-control next-talk-input" id="nextTalkTime" aria-disabled="true" disabled>
+                  <div id="nextTalkForm" style="display: none" checked="false">
+                    <div class="mb-3">
+                      <label for="nextTalkTopic" class="form-label">Tema da próxima conversa</label>
+                      <input type="text" class="form-control next-talk-input" id="nextTalkTopic" aria-disabled="true" disabled>
+                    </div>
+                    <div class="mb-3">
+                      <label for="nextTalkDate" class="form-label">Data</label>
+                      <input type="date" class="form-control next-talk-input" id="nextTalkDate" aria-disabled="true" disabled>
+                    </div>
+                    <div class="mb-3">
+                      <label for="nextTalkTime" class="form-label">Horário</label>
+                      <input type="time" class="form-control next-talk-input" id="nextTalkTime" aria-disabled="true" disabled>
+                    </div>
                   </div>
                   <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary" id="submitContactBtn" data-bs-dismiss="modal" disabled>Registrar</button>
@@ -240,7 +246,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <em class="d-block mb-4" id="numberInfoTel"></em>
+          <span class="d-block mb-4" id="numberInfoTel"></span>
 
           <h5 class="fs-6 fw-bold">Unidade federativa</h5>
           <p id="numberInfoUF">Carregando...</p>

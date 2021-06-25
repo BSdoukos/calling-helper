@@ -226,6 +226,8 @@ class PhoneListController {
             $('#workedTime').text(`${timing.time.hours} horas e ${timing.time.minutes} minutos`);
             $('.cronometer-btns, #timingText').remove();
             $('#startTimingBtn').css('display', 'initial');
+            timing = null;
+            sessionStorage.removeItem('timing');
         });
 
         window.timingCounter = setInterval(updateCronometer, 1000);

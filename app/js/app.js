@@ -126,14 +126,15 @@ $('#reportTimeBtn').on('click', function() {
 $(document).on('click', '.number-row', function(e) {
     const listData = new ListHandler();
     const targetRow = $(e.target).parents('.number-row');
+    const number = targetRow.find('.number-cell').text();
 
-    $('#numberInfoTel').text(targetRow.find('.number-cell').text());
+    $('#numberInfoTel').html(`<a href="tel:${number.replace(/\(\d{2}\)\s/g, '').replace('-', '')}">${number}</a>`);
 
     const status = targetRow.find('.status-cell').html();
     const statusInfo = ['Inexistente', 'Cx. postal', 'Falha', 'Ocupado', 'Desligado/sem serviço', '-'].some((s) => s === status) ? status : `Sucesso (contato com ${status})`;
     $('#numberInfoStatus').html(statusInfo);
 
-    const lastCall = listData.getPhoneNumber($('#titleCell').text(), $('#numberInfoTel').text()).lastCall;
+    const lastCall = listData.getPhoneNumber($('#titleCell').text(), number).lastCall;
     const lastCallInfo = lastCall || '-';
 
     $('#numberInfoLastCall').text(lastCallInfo);
@@ -143,11 +144,11 @@ $(document).on('click', '.number-row', function(e) {
         .then((response) => response.text())
         .then((data) => {
             window.DDDs = JSON.parse(data);
-            const UF = DDDs.estadoPorDdd[$('#numberInfoTel').text().substring(1, 3)] || 'Não identificada';
+            const UF = DDDs.estadoPorDdd[number.substring(1, 3)] || 'Não identificada';
             $('#numberInfoUF').text(UF);
         });
     } else {
-        const UF = DDDs.estadoPorDdd[$('#numberInfoTel').text().substring(1, 3)] || 'Não identificada';
+        const UF = DDDs.estadoPorDdd[number.substring(1, 3)] || 'Não identificada';
         $('#numberInfoUF').text(UF);
     }
 });
@@ -184,4 +185,10 @@ $('#saveChangesBtn').on('click', function() {
 });
 
 $('#deleteNumberBtn').on('click', app.deleteNumber.bind(app));
+
+$('#callAgain').prop('checked', false);
+$('#callAgain').on('change', () => {
+    $('#nextTalkForm').toggle();
+});
+
 });
