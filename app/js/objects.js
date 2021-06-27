@@ -401,14 +401,14 @@ class Scheduling {
         const settings = JSON.parse(localStorage.getItem('settings'));
 
         if (settings.contactsScheduledSync) {
-            const relatedContact = Contact.get(this.data.contact);
+            const relatedContact = Contact.get(this.data.contact.id);
 
             relatedContact.conversations.push({
                 topic: this.data.topic,
                 text
             });
     
-            Contact.remove(this.data.contact);
+            Contact.remove(this.data.contact.id);
             relatedContact.save();
         }
 

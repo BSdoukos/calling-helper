@@ -168,7 +168,7 @@ class ScheduleView {
             textInput.prop('disabled', this.checked);
 
             if (this.checked) {
-                textInput.val('Nenhum');
+                textInput.val('Nenhum(a)');
             } else {
                 textInput.val('');
             }
