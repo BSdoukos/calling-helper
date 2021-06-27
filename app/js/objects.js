@@ -428,7 +428,7 @@ class Scheduling {
     if (scheduled) {
         scheduled = JSON.parse(scheduled);
 
-        const scheduledForToday = scheduled.filter((sch) => sch.date === new Date().toISOString().slice(0, -14));
+        const scheduledForToday = scheduled.filter((sch) => Date.parse(sch.date) <= Date.parse(new Date().toISOString().slice(0, -14)));
 
         if (scheduledForToday.length) {
             $('.scheduled-calls-badge').text(scheduledForToday.length);
