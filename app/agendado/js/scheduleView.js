@@ -192,15 +192,8 @@ class ScheduleView {
         const noScheduleInfo = $('#noScheduleInfo');
         const editScheduleBtn = $('#editScheduleBtn');
 
-        if (scheduledCalls) {
-            try {
-                scheduledCalls = JSON.parse(scheduledCalls);        
-            } catch (err) {
-                if (err.message.indexOf('JSON.parse: unexpected character') > -1) {
-                    scheduledCalls = [];
-                    localStorage.setItem('schedule', JSON.stringify(scheduledCalls));
-                }
-            }
+        if (scheduledCalls) {   
+            scheduledCalls = JSON.parse(scheduledCalls);
 
             if (scheduledCalls.length) {
                 this.fillContainer(scheduledCalls);
