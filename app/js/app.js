@@ -90,9 +90,12 @@ $('#unknownName').on('change', function() {
     contactNameInput.val('Sem nome').attr('disabled', !contactNameInput.get(0).disabled);
 });
 
+$('#callAgain').prop('checked', false);
+
 $('#callAgain').on('change', function() {
-    const nextTalkInputs = $('.next-talk-input').get();
-    nextTalkInputs.forEach((input) => $(input).attr('disabled', !input.disabled).attr('aria-disabled', !$(input).attr('aria-disabled')));
+    $('#submitContactBtn').prop('disabled', true);
+    $('.next-talk-input:not(#nextTalkTopic)').prop('required', true);
+    $('#nextTalkForm').toggle();
 });
 
 $('#submitContactBtn').on('click', function(e) {
@@ -185,10 +188,5 @@ $('#saveChangesBtn').on('click', function() {
 });
 
 $('#deleteNumberBtn').on('click', app.deleteNumber.bind(app));
-
-$('#callAgain').prop('checked', false);
-$('#callAgain').on('change', () => {
-    $('#nextTalkForm').toggle();
-});
 
 });

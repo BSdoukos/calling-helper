@@ -331,7 +331,8 @@ class Scheduling {
     }
 
     static createFrom(schedulingData) {
-        if (['contact', 'topic', 'date', 'time', 'id'].every((prop) => schedulingData[prop])) {
+        if (['contact', 'date', 'time', 'id'].every((prop) => schedulingData[prop])) {
+            schedulingData.topic = schedulingData.topic || 'Nenhum(a)';
             return new Scheduling(schedulingData.contact, schedulingData.topic, schedulingData.date, schedulingData.time, schedulingData.id);
         }
     }
