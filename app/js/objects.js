@@ -376,6 +376,10 @@ class Scheduling {
 
         const actualDate = new Date();
 
+        function formatDateAsDefault() {
+            return `${date.day}/${date.month}/${date.year}`;
+        }
+
         if (parseInt(date.year) === actualDate.getFullYear() && parseInt(date.month) === actualDate.getMonth() + 1) {
             switch (parseInt(date.day)) {
                 case actualDate.getDate():
@@ -391,8 +395,10 @@ class Scheduling {
                     break;
                 
                 default:
-                    date.interpretedDate = `${date.day}/${date.month}/${date.year}`;
+                    date.interpretedDate = formatDateAsDefault();
             }
+        } else {
+            date.interpretedDate = formatDateAsDefault();
         }
 
         return date;
@@ -400,10 +406,9 @@ class Scheduling {
 
     conclude(text) {
         const settings = JSON.parse(localStorage.getItem('settings'));
-
-        if (settings.contactsScheduledSync) {
-            const relatedContact = Contact.get(this.data.contact.id);
-
+        const relatedContact = Contact.get(this.data.contact.id);
+        
+        if (settings.contactsScheduledSync && relatedContact) {      
             relatedContact.conversations.push({
                 topic: this.data.topic,
                 text
