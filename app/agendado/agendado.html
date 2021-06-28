@@ -89,8 +89,8 @@
             <form>
                 <div class="mb-3">
                     <label for="scheduledTalkTopic" class="form-label">Contato a ser revisitado</label>
-                    <select class="form-select me-3" id="scheduledTalkContactSelector" aria-label="Selecionar contato">
-                      <option value="none" selected>Selecionar</option>
+                    <select class="form-select me-3" id="scheduledTalkContactSelector" aria-label="Selecionar contato" required>
+                      <option value="" selected>Selecionar</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -99,14 +99,14 @@
                 </div>
                 <div class="mb-3">
                     <label for="scheduledTalkDate" class="form-label">Data</label>
-                    <input type="date" class="form-control" id="scheduledTalkDate">
+                    <input type="date" class="form-control" id="scheduledTalkDate" required>
                 </div>
                 <div class="mb-3">
                     <label for="scheduledTalkTime" class="form-label">Horário</label>
-                    <input type="time" class="form-control" id="scheduledTalkTime">
+                    <input type="time" class="form-control" id="scheduledTalkTime" required>
                 </div>
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary" id="submitSchedulingBtn" data-bs-dismiss="modal">Registrar</button>
+                    <button type="submit" class="btn btn-primary" id="submitSchedulingBtn" data-bs-dismiss="modal" disabled>Registrar</button>
                 </div>
               
                 <script>
@@ -154,6 +154,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
   <script src="../js/objects.js"></script>
+  <script src="../js/view.js"></script>
   <script src="js/scheduleView.js"></script>
   <script>
     $(document).ready(() => {

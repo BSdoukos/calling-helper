@@ -5,7 +5,7 @@ class PhoneListView {
     validateInput(type, formSelector) {
         switch (type) {
             case 'simple':
-                const requiredInputs = $(formSelector).find('input').get().filter((input) => input.hasAttribute('required'));
+                const requiredInputs = $(formSelector).find('input, select').get().filter((input) => input.hasAttribute('required'));
 
                 if (requiredInputs.every((input) => input.value !== '')) {
                     $(formSelector).find('[type="submit"]').attr('disabled', false)

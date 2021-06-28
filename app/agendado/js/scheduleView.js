@@ -180,6 +180,11 @@ class ScheduleView {
             this.toggleButtons();
             this.init();
         }.bind(this));
+
+        $('#submitSchedulingBtn').prop('disabled', true);
+        $('#scheduleCallModal input, #scheduleCallModal select').on('input', () => {
+            PhoneListView.prototype.validateInput('simple', '#scheduleCallModal form');
+        });
     }
 
     init() {

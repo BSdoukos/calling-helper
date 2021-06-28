@@ -87,7 +87,8 @@ $('#contactCreationModal input').on('input', function() {
 
 $('#unknownName').on('change', function() {
     const contactNameInput = $('#contactName');
-    contactNameInput.val('Sem nome').attr('disabled', !contactNameInput.get(0).disabled);
+    contactNameInput.val('Sem nome');
+    $('#submitContactBtn').prop('disabled', false);
 });
 
 $('#callAgain').prop('checked', false);
