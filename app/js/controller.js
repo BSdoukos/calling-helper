@@ -105,7 +105,7 @@ class PhoneListController {
         const date = new Date();
         const timeData = {
             day: date.getDate(),
-            month: date.getMonth(),
+            month: date.getMonth() + 1,
             year: date.getFullYear(),
             hours: date.getHours(),
             minutes: date.getMinutes()

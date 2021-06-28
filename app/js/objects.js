@@ -408,7 +408,24 @@ class Scheduling {
         const settings = JSON.parse(localStorage.getItem('settings'));
         const relatedContact = Contact.get(this.data.contact.id);
         
-        if (settings.contactsScheduledSync && relatedContact) {      
+        if (settings.contactsScheduledSync && relatedContact) {
+            const date = new Date();
+
+            const timeData = {
+                day: date.getDate(),
+                month: date.getMonth() + 1,
+                year: date.getFullYear(),
+                hours: date.getHours(),
+                minutes: date.getMinutes()
+            };
+    
+            for (const n in timeData) {
+                if (timeData[n] < 10) {
+                    timeData[n] = '0' + timeData[n];
+                }
+            }
+     
+            relatedContact.lastCall = `${timeData.day}/${timeData.month}/${timeData.year} ${timeData.hours}:${timeData.minutes}`;  
             relatedContact.conversations.push({
                 topic: this.data.topic,
                 text
@@ -424,6 +441,11 @@ class Scheduling {
             new Report(!!localStorage.getItem('report'), 0, 0, 1, {hours: 0, minutes: 0}).save();
         }
 
+    }
+
+    getSharingInfo() {
+        return `Nome: ${this.data.contact.name}\nTelefone: ${this.data.contact.numbers}\nTema da conversa: ${this.data.topic}\nData: ${this.getDate().interpretedDate}\nHorário: ${this.data.time}\nObservações: ${this.data.contact.remarks}`
+        .replaceAll(' ', '%20').replaceAll('\n', '%0A');
     }
 }
 
