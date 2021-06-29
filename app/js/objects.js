@@ -444,7 +444,7 @@ class Scheduling {
     }
 
     getSharingInfo() {
-        return `Nome: ${this.data.contact.name}\nTelefone: ${this.data.contact.numbers}\nTema da conversa: ${this.data.topic}\nData: ${this.getDate().interpretedDate}\nHorário: ${this.data.time}\nObservações: ${this.data.contact.remarks}`
+        return `Nome: ${this.data.contact.name}\nTelefone: ${this.data.contact.number}\nTema da conversa: ${this.data.topic}\nData: ${this.getDate().interpretedDate}\nHorário: ${this.data.time}\nObservações: ${this.data.contact.remarks || 'Nenhum(a)'}`
         .replaceAll(' ', '%20').replaceAll('\n', '%0A');
     }
 }
