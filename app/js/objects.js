@@ -65,28 +65,6 @@ class Contact {
         this.id = id;
     }
 
-    static createFrom(obj) {
-        if (['name', 'number', 'lastCall', 'conversations'].every((prop) => obj[prop])) {
-            obj.remarks = obj.remarks || 'Nenhum(a)';
-            return new Contact(obj.name, obj.number, obj.lastCall, obj.remarks, obj.conversations);
-        }
-    }
-
-    static get(id) {
-        const storedData = JSON.parse(localStorage.getItem('contacts')).filter((contact) => contact.id === id)[0];
-
-        return !storedData ? storedData : new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.remarks, storedData.conversations, storedData.id);
-    }
-
-    static remove(id) {
-        const contacts = JSON.parse(localStorage.getItem('contacts'));
-        const requestedContact = contacts.filter((contact) => contact.id === id)[0];
-
-        contacts.splice(contacts.indexOf(requestedContact), 1);
-
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-    }
-
     merge(contact2, conflictSolutionType = 'replace') {
         if (conflictSolutionType === 'replace') {
             this.name = contact2.name;
@@ -189,34 +167,40 @@ class Contact {
         $(conversationSelector.find('option')[conversationIndex]).prop('selected', true);
     }
 }
+
+Object.defineProperties(Contact, {
+    createFrom: {
+        value: function(obj) {
+            if (['name', 'number', 'lastCall', 'conversations'].every((prop) => obj[prop])) {
+                obj.remarks = obj.remarks || 'Nenhum(a)';
+                return new Contact(obj.name, obj.number, obj.lastCall, obj.remarks, obj.conversations);
+            }
+        }
+    },
+    get: {
+        value: function(id) {
+            const storedData = JSON.parse(localStorage.getItem('contacts')).filter((contact) => contact.id === id)[0];
+    
+            return !storedData ? storedData : new Contact(storedData.name, storedData.number, storedData.lastCall, storedData.remarks, storedData.conversations, storedData.id);
+        }
+    },
+    remove: {
+        value: function(id) {
+            const contacts = JSON.parse(localStorage.getItem('contacts'));
+            const requestedContact = contacts.filter((contact) => contact.id === id)[0];
+    
+            contacts.splice(contacts.indexOf(requestedContact), 1);
+    
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+        }
+    }
+});
 class Timing {
     constructor() {
         this.begin;
         this.pauses = [];
         this.isPaused = false;
         this.time = {hours: 0, minutes: 0, seconds: 0};
-    }
-
-    static HOUR = 3600000;
-    static MINUTE = 60000;
-    static SECOND = 1000;
-
-    static clearSaved() {
-        timing = null;
-        sessionStorage.removeItem('timing');
-    }
-
-    static getSaved() {
-        const savedTiming = sessionStorage.getItem('timing') ? JSON.parse(sessionStorage.getItem('timing')) : null;
-        if (savedTiming) {
-            const timingObj = new Timing();
-
-            for (const key in savedTiming) {
-                timingObj[key] = savedTiming[key];
-            }
-    
-            return timingObj;
-        }
     }
 
     start() {
@@ -264,6 +248,38 @@ class Timing {
     }
 }
 
+Object.defineProperties(Timing, {
+    HOUR: {
+        value: 3600000
+    },
+    MINUTE: {
+        value: 60000
+    },
+    SECOND: {
+        value: 1000
+    },
+    clearSaved: {
+        value: function() {
+            timing = null;
+            sessionStorage.removeItem('timing');
+        }
+    },
+    getSaved: {
+        value: function() {
+            const savedTiming = sessionStorage.getItem('timing') ? JSON.parse(sessionStorage.getItem('timing')) : null;
+            if (savedTiming) {
+                const timingObj = new Timing();
+        
+                for (const key in savedTiming) {
+                    timingObj[key] = savedTiming[key];
+                }
+        
+                return timingObj;
+            }
+        }
+    }
+});
+
 class Report {
     constructor(isNew, publications, videos, returnVisits, time) {
         this.isNew = isNew;
@@ -272,19 +288,6 @@ class Report {
         this.videos = parseInt(videos);
         this.returnVisits = parseInt(returnVisits);
         this.month = Report.currentMonth;
-    }
-
-    static currentMonth = `${new Array("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro")[new Date().getMonth()].toString().toLowerCase()}-${new Date().getFullYear()}`;
-
-    static redefine() {
-        let reports = localStorage.getItem('reports');
-
-        if (reports) {
-            reports = JSON.parse(reports);
-            reports.pop();
-            localStorage.setItem('reports', JSON.stringify(reports));
-            new Report(true, 0, 0, 0, {hours: 0, minutes: 0}).save();
-        }
     }
     
     save() {
@@ -325,33 +328,28 @@ class Report {
     }
 }
 
+Object.defineProperties(Report, {
+    currentMonth: {
+        value: `${new Array("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro")[new Date().getMonth()].toString().toLowerCase()}-${new Date().getFullYear()}`
+    },
+    redefine: {
+        value: function() {
+            let reports = localStorage.getItem('reports');
+
+            if (reports) {
+                reports = JSON.parse(reports);
+                reports.pop();
+                localStorage.setItem('reports', JSON.stringify(reports));
+                new Report(true, 0, 0, 0, {hours: 0, minutes: 0}).save();
+            }
+        }
+    }
+});
+
 class Scheduling {
     constructor(contact, topic, date, time, id = Date.now()) {
         this.data = {contact, topic, date, time, id};
     }
-
-    static createFrom(schedulingData) {
-        if (['contact', 'date', 'time', 'id'].every((prop) => schedulingData[prop])) {
-            schedulingData.topic = schedulingData.topic || 'Nenhum(a)';
-            return new Scheduling(schedulingData.contact, schedulingData.topic, schedulingData.date, schedulingData.time, schedulingData.id);
-        }
-    }
-
-    static get(id) {
-        const storedData = JSON.parse(localStorage.getItem('schedule')).filter((scheduling) => scheduling.id === id)[0];
-
-        return Scheduling.createFrom(storedData);
-    }
-
-    static remove(id) {
-        const schedule = JSON.parse(localStorage.getItem('schedule'));
-        const requestedScheduling = schedule.filter((scheduling) => scheduling.id === id)[0];
-
-        schedule.splice(schedule.indexOf(requestedScheduling), 1);
-
-        localStorage.setItem('schedule', JSON.stringify(schedule));
-    }
-
 
     save() {
         let schedule = localStorage.getItem('schedule');
@@ -425,7 +423,7 @@ class Scheduling {
                 }
             }
      
-            relatedContact.lastCall = `${timeData.day}/${timeData.month}/${timeData.year} ${timeData.hours}:${timeData.minutes}`;  
+            relatedContact.lastCall = `${timeData.day}/${timeData.month}/${timeData.year} ${timeData.hours}:${timeData.minutes}`;
             relatedContact.conversations.push({
                 topic: this.data.topic,
                 text
@@ -448,6 +446,34 @@ class Scheduling {
         .replaceAll(' ', '%20').replaceAll('\n', '%0A');
     }
 }
+
+Object.defineProperties(Scheduling, {
+    createFrom: {
+        value: function(schedulingData) {
+            if (['contact', 'date', 'time', 'id'].every((prop) => schedulingData[prop])) {
+                schedulingData.topic = schedulingData.topic || 'Nenhum(a)';
+                return new Scheduling(schedulingData.contact, schedulingData.topic, schedulingData.date, schedulingData.time, schedulingData.id);
+            }
+        }
+    },
+    get: {
+        value: function(id) {
+            const storedData = JSON.parse(localStorage.getItem('schedule')).filter((scheduling) => scheduling.id === id)[0];
+
+            return Scheduling.createFrom(storedData);
+        }
+    },
+    remove: {
+        value: function(id) {
+            const schedule = JSON.parse(localStorage.getItem('schedule'));
+            const requestedScheduling = schedule.filter((scheduling) => scheduling.id === id)[0];
+    
+            schedule.splice(schedule.indexOf(requestedScheduling), 1);
+    
+            localStorage.setItem('schedule', JSON.stringify(schedule));
+        }
+    }
+});
 
 (function() {
     let scheduled = localStorage.getItem('schedule');

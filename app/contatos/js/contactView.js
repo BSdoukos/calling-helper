@@ -121,7 +121,10 @@ class ContactView {
 
     deleteConversation() {
         this.prepareEdition();
-        this.editedContact.conversations.pop();
+        
+        if (this.editedContact.conversations.length > 1) {
+            this.editedContact.conversations.pop();
+        }
     }
 
     showContactDeletionAlert() {

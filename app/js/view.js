@@ -8,31 +8,31 @@ class PhoneListView {
                 const requiredInputs = $(formSelector).find('input, select').get().filter((input) => input.hasAttribute('required'));
 
                 if (requiredInputs.every((input) => input.value !== '')) {
-                    $(formSelector).find('[type="submit"]').attr('disabled', false)
+                    $(formSelector).find('[type="submit"]').prop('disabled', false)
                 } else {
-                    $(formSelector).find('[type="submit"]').attr('disabled', true)
+                    $(formSelector).find('[type="submit"]').prop('disabled', true)
                 }
                 break;
             
             case 'phoneNumbers':
                 if ($('#phoneNumber').val() === '' && $('#phoneNumberSequence').val() === '') {
-                    $('#submitNumberBtn').attr('disabled', true)
+                    $('#submitNumberBtn').prop('disabled', true)
                 } else if ($('#phoneNumber').val().match(/\(\d{2}\)\s\d{5}\-\d{4}/g) || $('#phoneNumberSequence').val().match(/\(\d{2}\)\s\d{5}\-\d{4}\s\-\s\(\d{2}\)\s\d{5}\-\d{4}/g)) {
-                    $('#submitNumberBtn').attr('disabled', false)
+                    $('#submitNumberBtn').prop('disabled', false)
                 }
                 break;
 
             case 'listSelection':
                 const checkedBoxes = $('.list-selection-checkbox').get().filter((checkbox) => checkbox.checked);
                 if (checkedBoxes.length) {
-                    $('#deleteListBtn').attr('disabled', false);
+                    $('#deleteListBtn').prop('disabled', false);
                     if (checkedBoxes.length < 2) {
-                        $('#openListBtn').attr('disabled', false);
+                        $('#openListBtn').prop('disabled', false);
                     } else {
-                        $('#openListBtn').attr('disabled', true);
+                        $('#openListBtn').prop('disabled', true);
                     }
                 } else {
-                    $('.list-managing-btn').attr('disabled', true)
+                    $('.list-managing-btn').prop('disabled', true)
                 }
                 break;
             
