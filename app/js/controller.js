@@ -214,7 +214,7 @@ class PhoneListController {
             }
         });
         
-        $(window).on('unload', () => {
+        $(window).on('visibilitychange', () => {
             if (timing) {
                 timing.save();
             }
