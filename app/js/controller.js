@@ -185,6 +185,7 @@ class PhoneListController {
     
         window.updateCronometer = function() {
             timing.update();
+            timing.save();
 
             if (!$('#timingText').length) {
                 $('#startTimingBtn').parent().append(`
@@ -204,6 +205,7 @@ class PhoneListController {
         $('#toggleTimingBtn').on('click', function() {
             if (this.innerText === 'Pausar') {
                 timing.pause();
+                timing.save();
                 clearInterval(timingCounter);
                 this.innerText = 'Continuar';
             } else {
@@ -211,12 +213,6 @@ class PhoneListController {
                 updateCronometer();
                 window.timingCounter = setInterval(updateCronometer, 1000);
                 this.innerText = 'Pausar';
-            }
-        });
-        
-        $(window).on('visibilitychange', () => {
-            if (timing) {
-                timing.save();
             }
         });
         
