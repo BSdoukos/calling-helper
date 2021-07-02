@@ -5,6 +5,10 @@ $(document).ready(() => {
     }
     reports = JSON.parse(localStorage.getItem('reports'));
 
+    if (Report.currentMonth !== reports[reports.length - 1].month) {
+        new Report(true, 0, 0, 0, {hours: 0, minutes: 0}).save();
+    }
+
     function displayReport(month) {  
         const report = JSON.parse(localStorage.getItem('reports')).filter((report) => report.month === month)[0];
 
@@ -20,7 +24,8 @@ $(document).ready(() => {
         let formattedReportMonth = report.month.replace('-', '/');
         formattedReportMonth = formattedReportMonth.charAt(0).toUpperCase() + formattedReportMonth.substring(1, formattedReportMonth.length);
 
-        reportSelector.append(`<option value=${report.month}>${formattedReportMonth}</option>`)
+        reportSelector.prepend(`<option value=${report.month}>${formattedReportMonth}</option>`)
+        reportSelector.find('option:first').prop('selected', true);
     });
 
     displayReport(reportSelector.val());
@@ -62,4 +67,6 @@ $(document).ready(() => {
 
         reportTable.toggleClass('hiding')
     });
+
+    reportSelector.on('change', () => displayReport(reportSelector.val()));
 });
