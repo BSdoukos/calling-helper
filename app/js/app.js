@@ -1,3 +1,5 @@
+import announcements from "./announcements.js";
+
 const app = new PhoneListController(new PhoneListModel(), new PhoneListView());
 
 $(document).ready(() => {
@@ -45,6 +47,9 @@ app.displayUserData();
         $(`#${params.get('window')}`).modal('show');
         history.replaceState({}, document.title, "index.html");
     }
+
+// Exibe announcementas informativos
+    announcements();
 
 $('#listName').on('input', function() {
     app.view.validateInput('simple', '#newListModal form');

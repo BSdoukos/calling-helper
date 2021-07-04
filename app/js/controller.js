@@ -19,7 +19,7 @@ class PhoneListController {
         });
         
         $('.list-selection-checkbox').on('change', () => {
-            app.view.validateInput('listSelection');
+            this.view.validateInput('listSelection');
         }); 
     }
 
@@ -52,7 +52,7 @@ class PhoneListController {
                 });
 
                 $(`.phone-table .number-cell:contains("${userData.activeList.currentNumber}")`).parent().addClass('current table-active');
-                app.view.updateWorkContainer();
+                this.view.updateWorkContainer();
                 this.displayLists();
 
                 if (userData.activeList.isCompleted) {
@@ -96,7 +96,7 @@ class PhoneListController {
             });
         }
 
-        app.view.updateWorkContainer();
+        this.view.updateWorkContainer();
         this.displayLists();
     }
 
