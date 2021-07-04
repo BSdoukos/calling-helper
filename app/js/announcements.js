@@ -19,7 +19,8 @@ class Announcement {
 
     getState() {
         const thisAnnouncement = this.getAll().filter((announcement) => announcement.title === this.title)[0];
-        return thisAnnouncement?.show;
+        return thisAnnouncement ? thisAnnouncement.show : undefined;
+        
     }
     
     save(showingState) {
@@ -46,10 +47,10 @@ class Announcement {
     }
 }
 
-export default function init() {
+$(document).ready(() => {
     new Announcement('Armazenamento de dados', [
         'Esta aplicação armazena os seus dados de listas telefônicas, contatos, relatórios e outros em seu próprio dispositivo, através do recurso de armazenamento via web.',
         'Por esse motivo, é importante que os dados de website do Calling Helper não sejam excluídos. A limpeza de cookies, histórico de navegação ou cache não resulta em problemas, no entanto, caso os <strong>dados de site</strong> sejam removidos, é possível que ocorra a perda dos seus dados salvos.',
         'Em breve, seus dados passarão a ser armazenados de forma mais segura em um servidor remoto, de forma que esse problema deixará de existir.'
     ]).release();
-}
+});
